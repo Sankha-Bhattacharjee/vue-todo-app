@@ -1,26 +1,6 @@
 <template>
   <div class="home pa-5">
-    <v-btn class="ma-2" outlined color="primary" @click="toggleAddTaskForm">
-      {{ showAddFormButtonText }}
-    </v-btn>
-    <div v-if="showAddForm">
-      <v-text-field
-        v-model="newTaskTitle"
-        @blur="checkInput"
-        label="Add Title *"
-        clearable
-        required
-      ></v-text-field>
-      <v-text-field
-        v-model="newTaskSubTitle"
-        label="Add Description"
-        clearable
-      ></v-text-field>
-
-      <v-btn class="mr-4" type="submit" :disabled="invalid" color="primary" @click="addTask">
-        submit
-      </v-btn>
-    </div>
+    <add-todo @new-task="addTask" @show-alert="showAlertMessageDialog" />
     <v-list flat three-line>
       <div v-for="task in tasks" :key="task.id">
         <v-list-item
@@ -48,17 +28,22 @@
         <v-divider></v-divider>
       </div>
     </v-list>
+    <alert-dialog :message="alertMessage" v-if="showAlertMessage" @close-alert="closeAlertMessageBox"/>
   </div>
 </template>
 
 <script>
+import AddTodo from "../components/AddTodo.vue";
+import AlertDialog from "../components/AlertDialog.vue";
 export default {
+  components: {
+    AddTodo,
+    AlertDialog,
+  },
   data() {
     return {
-      showAddForm: false,
-      newTaskTitle:'',
-      newTaskSubTitle:'',
-      invalid: true,
+      alertMessage: "",
+      showAlertMessage: false,
       tasks: [
         {
           id: 1,
@@ -81,29 +66,10 @@ export default {
       ],
     };
   },
-  computed: {
-    showAddFormButtonText() {
-      return this.showAddForm ? "Close" : "Add Todo";
-    },
-  },
   methods: {
-    addTask(){
-      //console.log('addTask');
-      const newTask ={
-        id: Date.now().toString(),
-        title: this.newTaskTitle,
-        subTitle: this.newTaskSubTitle,
-        done: false
-      };
+    addTask(newTask) {
+      //console.log("addTask", newTask);
       this.tasks.push(newTask);
-      this.newTaskTitle = '';
-      this.newTaskSubTitle = '';
-
-    },
-    checkInput(){
-      if(this.newTaskTitle){
-        this.invalid = false;
-      }
     },
     completeTask(id) {
       //console.log("id: ", id);
@@ -113,9 +79,13 @@ export default {
     deleteTask(id) {
       this.tasks = this.tasks.filter((t) => t.id !== id);
     },
-    toggleAddTaskForm() {
-      this.showAddForm = !this.showAddForm;
+    showAlertMessageDialog(msg) {
+      this.alertMessage = msg;
+      this.showAlertMessage = true;
     },
+    closeAlertMessageBox(){
+      this.showAlertMessage = false;
+    }
   },
 };
 </script>
