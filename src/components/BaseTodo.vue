@@ -15,7 +15,7 @@
         <v-list-item-subtitle>{{ taskItem.subTitle }}</v-list-item-subtitle>
       </v-list-item-content>
       <v-list-item-action>
-        <options-menu />
+        <options-menu @update-task="updateCurrentTask" :currentTask="taskItem"/>
       </v-list-item-action>
     </template>
   </v-list-item>
@@ -37,6 +37,11 @@ export default {
       //this.tasks = this.tasks.filter((t) => t.id !== id);
       this.$emit("delete-taskitem", id);
     },
+    updateCurrentTask(updatedTask){
+      //console.log('updatedTask: ', updatedTask);
+      this.taskItem.title = updatedTask.newTitle;
+      this.taskItem.subTitle = updatedTask.newSubTitle;
+    }
   },
 };
 </script>
