@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" max-width="500px">
+  <v-dialog v-model="editDialog" max-width="500px">
     <template v-slot:activator="{ on, attrs }">
       <v-list-item-title
         color="primary"
@@ -50,7 +50,7 @@ export default {
   props: ["currentTaskItem"],
   data() {
     return {
-      dialog: false,
+      editDialog: false,
     };
   },
   watch: {
@@ -63,7 +63,7 @@ export default {
   },
   methods: {
     close() {
-      this.dialog = false;
+      this.editDialog = false;
       this.$emit("close-menu");
     },
     save() {
@@ -73,7 +73,7 @@ export default {
         newSubTitle: this.currentTaskItem.subTitle,
       };
       this.$emit("edited-task", updatedTask);
-      this.dialog = false;
+      this.editDialog = false;
       this.$emit("close-menu");
     },
   },

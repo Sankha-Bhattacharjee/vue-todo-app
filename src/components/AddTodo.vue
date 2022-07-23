@@ -74,7 +74,9 @@ export default {
         this.showAlert = true;
         message = "New Task has been added";
       }
+      this.showAddForm = false;
       this.$emit("show-alert", message);
+
     },
   },
 };
