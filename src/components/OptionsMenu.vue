@@ -18,17 +18,31 @@
           :currentTaskItem="currentTask"
         />
       </v-list-item>
+      <v-list-item>
+        <delete-todo
+          @delete-task="deleteCurrentTaskItem"
+          @close-menu="closeMenu"
+          :currentTaskItemId="currentTask.id"
+        />
+      </v-list-item>
+      <v-list-item>
+        <due-date @due-date="updateDueDate" @close-menu="closeMenu"/>
+      </v-list-item>
     </v-list>
   </v-menu>
 </template>
 
 <script>
 import EditTodo from "./EditTodo.vue";
+import DeleteTodo from "./DeleteTodo.vue";
+import DueDate from "./DueDate.vue";
 export default {
-  emit: ["update-task"],
+  emit: ["update-task", "delete-current-task","update-date"],
   props: ["currentTask"],
   components: {
     EditTodo,
+    DeleteTodo,
+    DueDate,
   },
   data() {
     return {
@@ -48,6 +62,12 @@ export default {
     closeMenu() {
       this.menu = false;
     },
+    deleteCurrentTaskItem(id) {
+      this.$emit("delete-current-task", id);
+    },
+    updateDueDate(dueDate){
+      this.$emit("update-date", dueDate);
+    }
   },
 };
 </script>
