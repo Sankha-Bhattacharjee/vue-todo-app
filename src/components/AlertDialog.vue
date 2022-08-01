@@ -1,36 +1,37 @@
 <template>
-  <v-alert
-    close-icon="mdi-close-circle-outline"
-    elevation="5"
-    color="blue"
-    dense
-    id="alertbox"
-  >
-    <v-row align="center">
-      <v-col class="grow">
-        {{ message }}
-      </v-col>
-      <v-col class="shrink">
-        <v-icon dark @click="closeAlert"> mdi-close-circle-outline </v-icon>
-      </v-col>
-    </v-row>
-  </v-alert>
+    <v-snackbar v-model="snackbar" :timeout="timeout" color="primary">
+      {{ message }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn color="white" text v-bind="attrs" @click="snackbar = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
 </template>
 
 <script>
 export default {
-  props: ["message"],
-  methods: {
-    closeAlert() {
-      this.$emit('close-alert');
-    },
+  props: ["message","showAlert"],
+  data(){
+    return {
+      snackbar:false,
+      timeout: 2500,
+    };
   },
+  watch:{
+    showAlert(val){
+      if (val){
+        this.snackbar = true;
+      }
+    }
+  }
 };
 </script>
 
 <style scoped>
-#alertbox{
-    color: white;
+#alertbox {
+  color: white;
 }
 </style>
 

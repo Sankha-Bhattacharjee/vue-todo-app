@@ -1,11 +1,13 @@
 <template>
   <div class="home pa-5">
-    <add-todo @new-task="addTask" @show-alert="showAlertMessageDialog" />
+    <add-todo @new-task="addTask" @show-alert="showAlertForAddingTask" />
     <v-list flat three-line>
       <div v-for="task in tasks" :key="task.id">
         <base-todo
           :task-item="task"
           @complete-taskitem="completeTask"
+          @update-task-item="updateTask"
+          @update-due-date="updateDueDate"
           @delete-taskitem="deleteTask"
         />
         <v-divider></v-divider>
@@ -13,8 +15,7 @@
     </v-list>
     <alert-dialog
       :message="alertMessage"
-      v-if="showAlertMessage"
-      @close-alert="closeAlertMessageBox"
+      :showAlert="showAlertMessage"
     />
   </div>
 </template>
@@ -68,16 +69,26 @@ export default {
       const task = this.tasks.find((t) => t.id === id);
       task.done = !task.done;
     },
+    updateTask(){
+      const updateTaskMessage = "The task item has been updated.";
+      this.showAlertMessageDialog(updateTaskMessage);
+    },
+    updateDueDate(){
+      const dueDateMessage = "Due date has been updated";
+      this.showAlertMessageDialog(dueDateMessage);
+    },
     deleteTask(id) {
       //console.log("task deleted: ", id);
       this.tasks = this.tasks.filter((t) => t.id !== id);
+      const deleteMessage = "The item has been deleted.";
+      this.showAlertMessageDialog(deleteMessage);
+    },
+    showAlertForAddingTask(msg){
+      this.showAlertMessageDialog(msg);
     },
     showAlertMessageDialog(msg) {
       this.alertMessage = msg;
       this.showAlertMessage = true;
-    },
-    closeAlertMessageBox() {
-      this.showAlertMessage = false;
     },
   },
 };
