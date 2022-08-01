@@ -11,12 +11,12 @@
       <v-list-item-content
         :class="{ 'text-decoration-line-through': taskItem.done }"
       >
-        <v-list-item-title>{{ taskItem.title }}
-        </v-list-item-title>
+        <v-list-item-title>{{ taskItem.title }} </v-list-item-title>
         <v-list-item-subtitle>
           {{ taskItem.subTitle }}
           <v-row justify="end" class="mr-10 pb-5" v-if="isDueDateSet">
-            <v-icon small>mdi-calendar</v-icon> Due Date: {{ calculatedDueDate }}
+            <v-icon small>mdi-calendar</v-icon> Due Date:
+            {{ calculatedDueDate }}
           </v-row>
         </v-list-item-subtitle>
       </v-list-item-content>
@@ -35,7 +35,7 @@
 <script>
 import OptionsMenu from "./OptionsMenu.vue";
 export default {
-  emit: ["complete-taskitem", "delete-taskitem"],
+  emit: ["complete-taskitem", "delete-taskitem", "update-task-item","update-due-date"],
   props: ["taskItem"],
   components: {
     OptionsMenu,
@@ -60,10 +60,12 @@ export default {
       //console.log('updatedTask: ', updatedTask);
       this.taskItem.title = updatedTask.newTitle;
       this.taskItem.subTitle = updatedTask.newSubTitle;
+      this.$emit("update-task-item");
     },
     updateDueDateForCurrentTask(dueDate) {
       this.taskItem.dueDate = dueDate;
       console.log(this.taskItem.dueDate);
+      this.$emit("update-due-date");
     },
   },
 };
