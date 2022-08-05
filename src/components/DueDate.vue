@@ -10,7 +10,7 @@
       class="mt-4"
       color="primary"
       v-model="picker"
-      :min="picker"
+      :min="currentDate"
       :show-current="false"
     >
       <v-row justify="end" class="mb-2">
@@ -23,13 +23,12 @@
 
 <script>
 export default {
-  emit: ["close-menu","due-date"],
+  emit: ["close-menu", "due-date"],
   data() {
     return {
       dateDialog: false,
-      picker: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
-        .toISOString()
-        .substr(0, 10),
+      picker: "",
+      currentDate: "",
     };
   },
   watch: {
@@ -39,13 +38,24 @@ export default {
       }
     },
   },
+  computed: {
+    computeCurrentDate() {
+      return new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+        .toISOString()
+        .substr(0, 10);
+    },
+  },
+  created() {
+    this.picker = this.computeCurrentDate;
+    this.currentDate = this.computeCurrentDate;
+  },
   methods: {
     closeDate() {
       this.dateDialog = false;
       this.$emit("close-menu");
     },
     confirmDate() {
-      console.log("date:", this.picker);
+      //console.log("date:", this.picker);
       this.dateDialog = false;
       this.$emit("close-menu");
       const formattedDueDate = this.formatDueDate(this.picker);
