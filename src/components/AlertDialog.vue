@@ -1,31 +1,39 @@
 <template>
-    <v-snackbar v-model="snackbar" :timeout="timeout" color="primary">
-      {{ message }}
+  <v-snackbar v-model="snackbar" color="primary">
+    {{ message }}
 
-      <template v-slot:action="{ attrs }">
-        <v-btn color="white" text v-bind="attrs" @click="snackbar = false">
-          Close
-        </v-btn>
-      </template>
-    </v-snackbar>
+    <template v-slot:action="{ attrs }">
+      <v-btn color="white" text v-bind="attrs" @click="closeAlert">
+        Close
+      </v-btn>
+    </template>
+  </v-snackbar>
 </template>
 
 <script>
 export default {
-  props: ["message","showAlert"],
-  data(){
+  emit: ["close-alert"],
+  props: ["message", "showAlert"],
+  data() {
     return {
-      snackbar:false,
-      timeout: 2500,
+      snackbar: false,
     };
   },
-  watch:{
-    showAlert(val){
-      if (val){
+  watch: {
+    showAlert(val) {
+      if (!val) {
+        //console.log("watch close")
+        this.snackbar = false;
+      } else {
         this.snackbar = true;
       }
-    }
-  }
+    },
+  },
+  methods: {
+    closeAlert() {
+      this.$emit("close-alert");
+    },
+  },
 };
 </script>
 

@@ -16,6 +16,7 @@
     <alert-dialog
       :message="alertMessage"
       :showAlert="showAlertMessage"
+      @close-alert="closeAlertDialog"
     />
   </div>
 </template>
@@ -90,6 +91,9 @@ export default {
       this.alertMessage = msg;
       this.showAlertMessage = true;
     },
+    closeAlertDialog(){
+      this.showAlertMessage = false;
+    }
   },
 };
 </script>

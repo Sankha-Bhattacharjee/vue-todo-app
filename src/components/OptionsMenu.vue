@@ -56,7 +56,7 @@ export default {
   },
   methods: {
     editTask(task) {
-      console.log("editTask", task);
+      //console.log("editTask", task);
       this.$emit("update-task", task);
     },
     closeMenu() {
