@@ -64,7 +64,6 @@ export default {
     },
     updateDueDateForCurrentTask(dueDate) {
       this.taskItem.dueDate = dueDate;
-      //console.log(this.taskItem.dueDate);
       this.$emit("update-due-date");
     },
   },

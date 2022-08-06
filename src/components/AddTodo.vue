@@ -66,6 +66,7 @@ export default {
           id: Date.now().toString(),
           title: this.newTaskTitle,
           subTitle: this.newTaskSubTitle,
+          dueDate: null,
           done: false,
         };
         this.$emit("new-task", newTask);
