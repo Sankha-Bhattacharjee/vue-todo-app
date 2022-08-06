@@ -21,13 +21,13 @@
           <v-row>
             <v-col cols="12" sm="6" md="4">
               <v-text-field
-                v-model="currentTaskItem.title"
+                v-model="currentTaskItemTitle"
                 label="Enter Task Title"
               ></v-text-field
             ></v-col>
             <v-col cols="12" sm="6" md="4">
               <v-text-field
-                v-model="currentTaskItem.subTitle"
+                v-model="currentTaskItemSubTitle"
                 label="Enter Task Subtitle"
               >
               </v-text-field>
@@ -51,15 +51,21 @@ export default {
   data() {
     return {
       editDialog: false,
+      currentTaskItemTitle: '',
+      currentTaskItemSubTitle: '',
     };
   },
   watch: {
-    dialog(val) {
+    editDialog(val) {
       if (!val) {
         //console.log("dialog watch:", val);
         this.$emit("close-menu");
       }
     },
+  },
+  mounted(){
+    this.currentTaskItemTitle = this.currentTaskItem.title;
+    this.currentTaskItemSubTitle = this.currentTaskItem.subTitle;
   },
   methods: {
     close() {
@@ -69,8 +75,8 @@ export default {
     save() {
       //console.log("Saved: ", this.task);
       const updatedTask = {
-        newTitle: this.currentTaskItem.title,
-        newSubTitle: this.currentTaskItem.subTitle,
+        newTitle: this.currentTaskItemTitle,
+        newSubTitle: this.currentTaskItemSubTitle,
       };
       this.$emit("edited-task", updatedTask);
       this.editDialog = false;
