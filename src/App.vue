@@ -49,27 +49,28 @@
 
       <v-spacer></v-spacer>
 
-      <search-key v-if="isSearchTextBox" />
+      <search-todo v-if="isSearchTextBox" @search-todo="searchParticularTodo"/>
       <v-btn icon v-else>
         <v-icon @click="toggleSearchTextBox">mdi-magnify</v-icon>
       </v-btn>
     </v-app-bar>
 
     <v-main>
-      <router-view></router-view>
+      <router-view :search-todo="searchTodoKey"></router-view>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import SearchKey from "./components/SearchTask.vue";
+import SearchTodo from "./components/SearchTodo.vue";
 export default {
   components: {
-    SearchKey,
+    SearchTodo,
   },
   data: () => ({
     drawer: null,
     isSearchTextBox: false,
+    searchTodoKey:'',
     items: [
       { title: "Todo", icon: "mdi-format-list-checks", to: "/" },
       { title: "About", icon: "mdi-information", to: "/about" },
@@ -79,6 +80,9 @@ export default {
     toggleSearchTextBox() {
       this.isSearchTextBox = !this.isSearchTextBox;
       console.log(this.isSearchTextBox);
+    },
+    searchParticularTodo(val){
+      this.searchTodoKey = val;
     },
   },
 };
