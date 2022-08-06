@@ -51,8 +51,8 @@ export default {
   data() {
     return {
       editDialog: false,
-      currentTaskItemTitle: '',
-      currentTaskItemSubTitle: '',
+      currentTaskItemTitle: "",
+      currentTaskItemSubTitle: "",
     };
   },
   watch: {
@@ -63,13 +63,17 @@ export default {
       }
     },
   },
-  mounted(){
-    this.currentTaskItemTitle = this.currentTaskItem.title;
-    this.currentTaskItemSubTitle = this.currentTaskItem.subTitle;
+  created() {
+    this.fetchCurrentTask();
   },
   methods: {
+    fetchCurrentTask() {
+      this.currentTaskItemTitle = this.currentTaskItem.title;
+      this.currentTaskItemSubTitle = this.currentTaskItem.subTitle;
+    },
     close() {
       this.editDialog = false;
+      this.fetchCurrentTask();
       this.$emit("close-menu");
     },
     save() {

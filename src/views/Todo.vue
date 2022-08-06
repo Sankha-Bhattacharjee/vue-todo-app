@@ -2,7 +2,7 @@
   <div class="home pa-5">
     <add-todo @new-task="addTask" @show-alert="showAlertForAddingTask" />
     <v-list flat three-line>
-      <div v-for="task in tasks" :key="task.id">
+      <div v-for="task in updatedTaskList" :key="task.id">
         <base-todo
           :task-item="task"
           @complete-taskitem="completeTask"
@@ -26,6 +26,7 @@ import AddTodo from "../components/AddTodo.vue";
 import AlertDialog from "../components/AlertDialog.vue";
 import BaseTodo from "../components/BaseTodo.vue";
 export default {
+  props: ["searchTodo"],
   components: {
     AddTodo,
     AlertDialog,
@@ -58,23 +59,43 @@ export default {
           done: false,
         },
       ],
+      updatedTaskList: null,
     };
   },
+  watch: {
+    searchTodo(newVal, oldVal) {
+      //console.log("new ",newVal,"old", oldVal);
+      this.filterTodos(newVal);
+    },
+  },
+  created(){
+    this.updatedTaskList = this.tasks;
+  },
   methods: {
+    filterTodos(val) {
+      const searchedKey = val.toLowerCase();
+      const filteredTodo = this.tasks.filter(
+        (t) =>
+          t.title.toLowerCase().includes(searchedKey) ||
+          t.subTitle.toLowerCase().includes(searchedKey)
+      );
+      this.updatedTaskList = filteredTodo;
+    },
     addTask(newTask) {
       //console.log("addTask", newTask);
       this.tasks.push(newTask);
+      this.updatedTaskList = this.tasks;
     },
     completeTask(id) {
       //console.log("task completed: ", id);
       const task = this.tasks.find((t) => t.id === id);
       task.done = !task.done;
     },
-    updateTask(){
+    updateTask() {
       const updateTaskMessage = "The task item has been updated.";
       this.showAlertMessageDialog(updateTaskMessage);
     },
-    updateDueDate(){
+    updateDueDate() {
       const dueDateMessage = "Due date has been updated";
       this.showAlertMessageDialog(dueDateMessage);
     },
@@ -84,16 +105,16 @@ export default {
       const deleteMessage = "The item has been deleted.";
       this.showAlertMessageDialog(deleteMessage);
     },
-    showAlertForAddingTask(msg){
+    showAlertForAddingTask(msg) {
       this.showAlertMessageDialog(msg);
     },
     showAlertMessageDialog(msg) {
       this.alertMessage = msg;
       this.showAlertMessage = true;
     },
-    closeAlertDialog(){
+    closeAlertDialog() {
       this.showAlertMessage = false;
-    }
+    },
   },
 };
 </script>
