@@ -35,7 +35,7 @@
 <script>
 import OptionsMenu from "./OptionsMenu.vue";
 export default {
-  emit: ["complete-taskitem", "delete-taskitem", "update-task-item","update-due-date"],
+  emit: ["delete-taskitem", "update-task-item","update-due-date"],
   props: ["taskItem"],
   components: {
     OptionsMenu,
@@ -50,10 +50,9 @@ export default {
   },
   methods: {
     completeTaskItem(id) {
-      this.$emit("complete-taskitem", id);
+      this.$store.dispatch("completeCurrentTask", id);
     },
     deleteTaskItem(id) {
-      //this.tasks = this.tasks.filter((t) => t.id !== id);
       this.$emit("delete-taskitem", id);
     },
     updateCurrentTask(updatedTask) {

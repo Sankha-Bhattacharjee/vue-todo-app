@@ -1,11 +1,10 @@
 <template>
   <div class="home pa-5">
-    <add-todo @new-task="addTask" @show-alert="showAlertForAddingTask" />
+    <add-todo  @show-alert="showAlertForAddingTask" />
     <v-list flat three-line>
-      <div v-for="task in updatedTaskList" :key="task.id">
+      <div v-for="task in taskList" :key="task.id">
         <base-todo
           :task-item="task"
-          @complete-taskitem="completeTask"
           @update-task-item="updateTask"
           @update-due-date="updateDueDate"
           @delete-taskitem="deleteTask"
@@ -36,30 +35,6 @@ export default {
     return {
       alertMessage: "",
       showAlertMessage: false,
-      tasks: [
-        {
-          id: 1,
-          title: "Wake up",
-          subTitle: "wake up at 7 AM",
-          dueDate: null,
-          done: false,
-        },
-        {
-          id: 2,
-          title: "Get groceries",
-          subTitle: "Grocery for evening party",
-          dueDate: null,
-          done: false,
-        },
-        {
-          id: 3,
-          title: "Get wine",
-          subTitle: "Wine for party",
-          dueDate: null,
-          done: false,
-        },
-      ],
-      updatedTaskList: null,
     };
   },
   watch: {
@@ -68,28 +43,23 @@ export default {
       this.filterTodos(newVal);
     },
   },
-  created(){
+  created() {
     this.updatedTaskList = this.tasks;
+  },
+  computed: {
+    taskList() {
+      return this.$store.getters["getTaskList"];
+    },
   },
   methods: {
     filterTodos(val) {
       const searchedKey = val.toLowerCase();
-      const filteredTodo = this.tasks.filter(
+      const filteredTodo = this.$store.getters["getTaskList"].filter(
         (t) =>
           t.title.toLowerCase().includes(searchedKey) ||
           t.subTitle.toLowerCase().includes(searchedKey)
       );
-      this.updatedTaskList = filteredTodo;
-    },
-    addTask(newTask) {
-      //console.log("addTask", newTask);
-      this.tasks.push(newTask);
-      this.updatedTaskList = this.tasks;
-    },
-    completeTask(id) {
-      //console.log("task completed: ", id);
-      const task = this.tasks.find((t) => t.id === id);
-      task.done = !task.done;
+      this.$store.dispatch("updateTaskList",filteredTodo);
     },
     updateTask() {
       const updateTaskMessage = "The task item has been updated.";
@@ -101,7 +71,7 @@ export default {
     },
     deleteTask(id) {
       //console.log("task deleted: ", id);
-      this.tasks = this.tasks.filter((t) => t.id !== id);
+      this.$store.dispatch("deleteCurrentTask",id);
       const deleteMessage = "The item has been deleted.";
       this.showAlertMessageDialog(deleteMessage);
     },

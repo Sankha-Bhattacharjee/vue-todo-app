@@ -32,7 +32,6 @@
 
 <script>
 export default {
-  emit: ["new-task"],
   data() {
     return {
       showAddForm: false,
@@ -69,7 +68,7 @@ export default {
           dueDate: null,
           done: false,
         };
-        this.$emit("new-task", newTask);
+        this.$store.dispatch("addNewTaskToTaskList", newTask);
         this.newTaskTitle = "";
         this.newTaskSubTitle = "";
         this.showAlert = true;
