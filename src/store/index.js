@@ -30,6 +30,7 @@ const state = {
       done: false,
     },
   ],
+  searchedTasks:[]
 };
 
 const store = new Vuex.Store({

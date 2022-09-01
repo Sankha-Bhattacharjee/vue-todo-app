@@ -1,6 +1,7 @@
 export default {
     setTaskList(state, payload) {
-        state.tasks = payload;
+        console.log(payload);
+        state.searchedTasks = payload;
     },
     addNewTask(state, payload){
         state.tasks.push(payload);
