@@ -48,17 +48,22 @@ export default {
   },
   computed: {
     taskList() {
+      if(this.searchTodo !==""){
+        return this.$store.getters["getsearchedTaskList"];
+      }
       return this.$store.getters["getTaskList"];
     },
   },
   methods: {
     filterTodos(val) {
+      console.log(this.$store.getters["getTaskList"],val);
       const searchedKey = val.toLowerCase();
       const filteredTodo = this.$store.getters["getTaskList"].filter(
         (t) =>
           t.title.toLowerCase().includes(searchedKey) ||
           t.subTitle.toLowerCase().includes(searchedKey)
       );
+      console.log(filteredTodo);
       this.$store.dispatch("updateTaskList",filteredTodo);
     },
     updateTask() {
@@ -79,6 +84,7 @@ export default {
       this.showAlertMessageDialog(msg);
     },
     showAlertMessageDialog(msg) {
+      this.showAlertMessage = false;
       this.alertMessage = msg;
       this.showAlertMessage = true;
     },

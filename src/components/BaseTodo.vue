@@ -14,7 +14,7 @@
         <v-list-item-title>{{ taskItem.title }} </v-list-item-title>
         <v-list-item-subtitle>
           {{ taskItem.subTitle }}
-          <v-row justify="end" class="mr-10 pb-5" v-if="isDueDateSet">
+          <v-row justify="end" class="mr-10 pb-5 font-weight-light text-body-2" v-if="isDueDateSet">
             <v-icon small>mdi-calendar</v-icon> Due Date:
             {{ calculatedDueDate }}
           </v-row>

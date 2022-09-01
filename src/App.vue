@@ -79,7 +79,7 @@ export default {
   methods: {
     toggleSearchTextBox() {
       this.isSearchTextBox = !this.isSearchTextBox;
-      console.log(this.isSearchTextBox);
+      //console.log(this.isSearchTextBox);
     },
     searchParticularTodo(val){
       this.searchTodoKey = val;

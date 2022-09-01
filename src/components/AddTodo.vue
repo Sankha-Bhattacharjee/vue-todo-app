@@ -13,8 +13,10 @@
       ></v-text-field>
       <v-text-field
         v-model="newTaskSubTitle"
-        label="Add Description"
+        @blur="checkInput"
+        label="Add Description *"
         clearable
+        required
       ></v-text-field>
 
       <v-btn
@@ -50,7 +52,7 @@ export default {
       this.showAddForm = !this.showAddForm;
     },
     checkInput() {
-      if (this.newTaskTitle) {
+      if (this.newTaskTitle && this.newTaskSubTitle) {
         this.invalid = false;
       } else {
         this.invalid = true;
@@ -58,8 +60,8 @@ export default {
     },
     submitTask() {
       let message = "";
-      if (!this.newTaskTitle) {
-        message = "Title is a mandatory field";
+      if (!this.newTaskTitle || !this.newTaskSubTitle) {
+        message = "This is a mandatory field";
       } else {
         const newTask = {
           id: Date.now().toString(),
