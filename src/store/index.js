@@ -7,6 +7,7 @@ import actions from './action.js'
 Vue.use(Vuex);
 
 const state = {
+  userId: '',
   tasks: [
     {
       id: 1,

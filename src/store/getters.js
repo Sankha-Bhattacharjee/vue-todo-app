@@ -4,5 +4,8 @@ export default {
     },
     getsearchedTaskList(state){
         return state.searchedTasks;
+    },
+    getUserId(state){
+        return state.userId;
     }
 };

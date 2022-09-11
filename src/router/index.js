@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Todo from '../views/Todo.vue'
 import About from '../views/About.vue'
+import UserAuth from '../views/UserAuth.vue'
 
 Vue.use(VueRouter)
 
@@ -15,6 +16,11 @@ const routes = [
         path: '/about',
         name: 'About',
         component: About
+    },
+    {
+        path: '/auth',
+        name: 'UserAuth',
+        component: UserAuth
     }
 ];
 

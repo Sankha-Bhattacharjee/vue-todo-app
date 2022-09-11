@@ -6,14 +6,14 @@
     <div v-if="showAddForm">
       <v-text-field
         v-model="newTaskTitle"
-        @blur="checkInput"
+        @keyup="checkInput"
         label="Add Title *"
         clearable
         required
       ></v-text-field>
       <v-text-field
         v-model="newTaskSubTitle"
-        @blur="checkInput"
+        @keyup="checkInput"
         label="Add Description *"
         clearable
         required
