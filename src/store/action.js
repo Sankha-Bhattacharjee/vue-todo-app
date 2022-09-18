@@ -47,15 +47,16 @@ export default {
             throw error;
         }
         
+        var selectedUser = null;
         for(let user in responseData) {
             const currentUser = responseData[user];
-            console.log("current usr", currentUser)
+            // console.log("current usr", currentUser)
             if(currentUser.email == payload.enteredEmail && currentUser.password == payload.enteredPassword){
-                const selectedUser = currentUser;
-                console.log(selectedUser)
+                selectedUser = currentUser;
+                // console.log(selectedUser)
                 break;
             }else{
-                console.log(typeof(currentUser.email), typeof(payload.enteredEmail))
+                console.log(currentUser.email,payload.enteredEmail)
                 const error = new Error("Failed to Authenticate!");
                 throw error;
             }
