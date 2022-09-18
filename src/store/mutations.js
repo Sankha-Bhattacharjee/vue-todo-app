@@ -14,9 +14,11 @@ export default {
     deleteTask(state, payload){
         const filteredTask =  state.tasks.filter((t) => t.id !== payload)
         state.tasks = filteredTask;
-    }, setUser(state, payload){
-        state.token = payload.token;
+    }, 
+    setUser(state, payload){
         state.userId = payload.id;
-        state.tokenExpiration = payload.tokenExpiration;
+        state.userFirstName = payload.firstName,
+        state.userLastName = payload.lastName,
+        state.isAuthenticated = true
     }
 };
