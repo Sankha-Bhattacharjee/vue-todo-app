@@ -102,6 +102,7 @@ export default {
           this.errorText = "Please enter all the required details!";
           console.log(this.errorText);
         }else{
+          //signup logic
           this.$store.dispatch("signup",{
               email: this.email,
               password: this.password,
@@ -120,7 +121,8 @@ export default {
           this.$store.dispatch("login",{
             enteredEmail: this.email,
             enteredPassword: this.password
-          })
+          });
+          this.$router.replace("/");
         }
       }
     }
