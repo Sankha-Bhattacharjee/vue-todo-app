@@ -7,7 +7,10 @@ import actions from './action.js'
 Vue.use(Vuex);
 
 const state = {
-  userId: '',
+  userId: 't1',
+  userFirstName:'',
+  userLastName: '',
+  isAuthenticated: false,
   tasks: [
     {
       id: 1,

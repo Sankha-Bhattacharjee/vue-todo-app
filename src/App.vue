@@ -8,8 +8,8 @@
           </v-list-item-avatar>
 
           <v-list-item-content>
-            <v-list-item-title>UserName</v-list-item-title>
-            <v-list-item-subtitle>Logged In</v-list-item-subtitle>
+            <v-list-item-title>{{computeUserName}}</v-list-item-title>
+            <v-list-item-subtitle>{{computeIsLoggedInMessage}}</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
       </template>
@@ -71,11 +71,31 @@ export default {
     drawer: null,
     isSearchTextBox: false,
     searchTodoKey:'',
+    isLoggedIn: false,
     items: [
       { title: "Todo", icon: "mdi-format-list-checks", to: "/" },
       { title: "About", icon: "mdi-information", to: "/about" },
     ],
   }),
+  computed:{
+    computeUserName(){
+      if(this.$store.getters.getIsAuthenticated){
+        const userFirstName = this.$store.getters.getUserFirstName;
+        const userLastName = this.$store.getters.getUserLastName;
+        this.isLoggedIn = true;
+        return `${userFirstName} ${userLastName}`;
+      }else{
+        return "Anonymous";
+      }
+    },
+    computeIsLoggedInMessage(){
+      if(this.isLoggedIn){
+        return "Logged in";
+      }else{
+        return "Signup/Login";
+      }
+    }
+  },
   methods: {
     toggleSearchTextBox() {
       this.isSearchTextBox = !this.isSearchTextBox;

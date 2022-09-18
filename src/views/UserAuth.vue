@@ -6,6 +6,7 @@
         :rules="firstNameRules"
         :counter="15"
         label="First name"
+        v-if="mode==='signup'"
         required
       ></v-text-field>
 
@@ -14,6 +15,7 @@
         :rules="lastNameRules"
         :counter="20"
         label="Last name"
+        v-if="mode==='signup'"
         required
       ></v-text-field>
 
@@ -31,8 +33,9 @@
         type="password"
         required
       ></v-text-field>
-      <v-btn color="primary" type="submit">SignUp</v-btn>
-      <v-btn color="blue lighten-3" type="button">Login</v-btn>
+      <span v-if="isError">{{errorText}}<br></span>
+      <v-btn color="primary" type="submit">{{button1Text}}</v-btn>
+      <v-btn color="blue lighten-3" type="button" @click="toggleMode">{{button2Text}}</v-btn>
     </v-container>
   </v-form>
 </template>
@@ -41,10 +44,13 @@
 export default {
   data() {
     return {
+      mode: "signup",
       valid: false,
       firstname: "",
       lastname: "",
       password: "",
+      errorText: "",
+      isError: false,
       firstNameRules: [
         (v) => !!v || "FirstName is required",
         (v) => v.length <= 15 || "FirstName must be less than 15 characters",
@@ -64,12 +70,59 @@ export default {
       ],
     };
   },
+  computed:{
+    button1Text(){
+      if(this.mode === "signup"){
+        return "Signup";
+      }else{
+        return "Login";
+      }
+    },
+    button2Text(){
+      if(this.mode === "login"){
+        return "Signup";
+      }else{
+        return "Login";
+      }
+    }
+  },
   methods:{
+    toggleMode(){
+      this.isError = false;
+      if(this.mode === "signup"){
+        this.mode = "login";
+      }else{
+        this.mode ="signup";
+      }
+    },
     submitForm(){
-        this.$store.dispatch("signup",{
-            email: this.email,
-            password: this.password
-        });
+      if(this.mode === "signup"){
+        if(!this.firstname || !this.lastname || !this.email || !this.password){
+          this.isError = true;
+          this.errorText = "Please enter all the required details!";
+          console.log(this.errorText);
+        }else{
+          this.$store.dispatch("signup",{
+              email: this.email,
+              password: this.password,
+              firstName: this.firstname,
+              lastName: this.lastname
+          });
+          this.$router.replace("/");
+        }
+      }else if(this.mode==="login"){
+        if(!this.email || !this.password){
+          this.isError = true;
+          this.errorText = "Please enter all the required details!";
+          console.log(this.errorText);
+        }else{
+          //login logic
+          this.$store.dispatch("login",{
+            enteredEmail: this.email,
+            enteredPassword: this.password
+          })
+        }
+      }
     }
   }
 };
@@ -78,10 +131,10 @@ export default {
 <style scoped>
 .container {
   max-width: 500px;
-  /* padding: 15px;
+  padding: 20px;
   margin-top: 20px;
   border-radius: 15px;
   box-shadow: 3px 3px 3px grey;
-  border: 1px solid grey; */
+  border: 1px solid rgb(192, 186, 186);
 }
 </style>
