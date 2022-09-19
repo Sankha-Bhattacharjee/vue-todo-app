@@ -2,7 +2,24 @@ export default {
     updateTaskList(context, payload) {
         context.commit("setTaskList", payload);
     },
-    addNewTaskToTaskList(context, payload) {
+    async addNewTaskToTaskList(context, payload) {
+        const userId = context.getters.getUserId;
+        const response = await fetch(`https://todo-app-a4835-default-rtdb.firebaseio.com/users/${userId}/todos.json`,{
+            method: 'POST',
+            body: JSON.stringify({
+                id: payload.id,
+                title: payload.title,
+                subTitle: payload.subTitle,
+                dueDate: payload.dueDate,
+                done: payload.done
+            })
+        });
+
+        if(!response.ok){
+            const error = new Error("Failed to add new task! Please try again later.");
+            throw error;
+        }
+
         context.commit("addNewTask", payload);
     },
     completeCurrentTask(context, payload) {
@@ -40,7 +57,7 @@ export default {
         const response = await fetch(`https://todo-app-a4835-default-rtdb.firebaseio.com/users.json`);
 
         const responseData = await response.json();
-         console.log(responseData, payload)
+         //console.log(responseData, payload)
 
         if (!response.ok) {
             const error = new Error("Failed to Authenticate!");

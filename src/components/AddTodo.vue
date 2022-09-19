@@ -59,10 +59,11 @@ export default {
       }
     },
     submitTask() {
+      const isuserLoggedIn = this.$store.getters.getIsAuthenticated;
       let message = "";
       if (!this.newTaskTitle || !this.newTaskSubTitle) {
         message = "This is a mandatory field";
-      } else {
+      } else if(isuserLoggedIn) {
         const newTask = {
           id: Date.now().toString(),
           title: this.newTaskTitle,
@@ -75,6 +76,8 @@ export default {
         this.newTaskSubTitle = "";
         this.showAlert = true;
         message = "New Task has been added";
+      }else{
+        this.$router.replace("/auth");
       }
       this.showAddForm = false;
       this.$emit("show-alert", message);
