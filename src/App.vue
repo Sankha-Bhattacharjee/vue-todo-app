@@ -9,7 +9,9 @@
 
           <v-list-item-content>
             <v-list-item-title>{{computeUserName}}</v-list-item-title>
-            <v-list-item-subtitle>{{computeIsLoggedInMessage}}</v-list-item-subtitle>
+            <v-list-item-subtitle>
+              <router-link :class="{'menu-subtitle':!isLoggedIn}" :to="authPath">{{computeIsLoggedInMessage}}</router-link>
+            </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
       </template>
@@ -78,6 +80,9 @@ export default {
     ],
   }),
   computed:{
+    authPath(){
+      return !this.isLoggedIn ? "/auth" : "";
+    },
     computeUserName(){
       if(this.$store.getters.getIsAuthenticated){
         const userFirstName = this.$store.getters.getUserFirstName;
@@ -107,3 +112,20 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.menu-subtitle{
+  text-decoration: none;
+  color: rgba(0, 0, 0, 0.6);
+}
+.menu-subtitle:hover{
+  text-decoration: underline;
+  color: #226eba !important;
+  cursor: pointer;
+}
+.router-link-active{
+  text-decoration: none;
+  color: rgba(0, 0, 0, 0.6);
+  cursor: text;
+}
+</style>
