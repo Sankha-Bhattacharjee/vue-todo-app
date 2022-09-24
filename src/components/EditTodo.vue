@@ -79,10 +79,13 @@ export default {
     save() {
       //console.log("Saved: ", this.task);
       const updatedTask = {
+        firebaseId: this.currentTaskItem.firebaseId,
+        id: this.currentTaskItem.id,
         newTitle: this.currentTaskItemTitle,
         newSubTitle: this.currentTaskItemSubTitle,
       };
-      this.$emit("edited-task", updatedTask);
+      this.$store.dispatch("updateTodoDescription",updatedTask);
+      this.$emit("edited-task");
       this.editDialog = false;
       this.$emit("close-menu");
     },

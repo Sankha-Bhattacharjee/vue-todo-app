@@ -85,5 +85,40 @@ export default {
             lastName: selectedUser.lastName,
         })
 
+    },
+
+    async fetchTodos(context){
+        const userId = context.getters.getUserId;
+        const response = await fetch(`https://todo-app-a4835-default-rtdb.firebaseio.com/users/${userId}/todos.json`);
+
+        const responseData = await response.json();
+        if(!response.ok){
+            const error = new Error("Failed to fetch todos list!")
+            throw error;
+        }
+
+        const tempTaskList=[];
+        for(let t in responseData){
+            const task={
+                ...responseData[t],
+                dueDate: null,
+                firebaseId: t
+            };
+            tempTaskList.push(task);
+        }
+        context.commit("setTaskList",tempTaskList);
+        console.log("data fetched")
+    },
+    async updateTodoDescription(context,payload){
+        const userId = context.getters.getUserId;
+
+        await fetch(`https://todo-app-a4835-default-rtdb.firebaseio.com/users/${userId}/todos/${payload.firebaseId}.json`,{
+            method: 'PATCH',
+            body: JSON.stringify({
+                title: payload.newTitle,
+                subTitle: payload.newSubTitle
+            })
+        });   
+        context.commit("updateTaskDescription",payload);     
     }
 };

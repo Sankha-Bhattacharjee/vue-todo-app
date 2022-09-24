@@ -123,6 +123,7 @@ export default {
             enteredPassword: this.password
           });
           this.$router.replace("/");
+          this.$store.dispatch("fetchTodos");
         }
       }
     }
