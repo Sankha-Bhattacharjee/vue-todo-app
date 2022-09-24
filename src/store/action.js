@@ -107,7 +107,6 @@ export default {
             tempTaskList.push(task);
         }
         context.commit("setTaskList",tempTaskList);
-        console.log("data fetched")
     },
     async updateTodoDescription(context,payload){
         const userId = context.getters.getUserId;

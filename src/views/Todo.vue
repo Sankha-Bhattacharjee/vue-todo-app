@@ -69,7 +69,6 @@ export default {
     updateTask() {
       const updateTaskMessage = "The task item has been updated.";
       this.showAlertMessageDialog(updateTaskMessage);
-      this.$store.dispatch("fetchTodos");
     },
     updateDueDate() {
       const dueDateMessage = "Due date has been updated";

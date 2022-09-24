@@ -6,10 +6,9 @@ export default {
         state.tasks.push(payload);
     },
     updateTaskDescription(state,payload){
-        const updatedTask =  state.tasks.filter((t) => t.id !== payload.id);
+        const updatedTask =  state.tasks.find((t) => t.id === payload.id);
         updatedTask.title = payload.newTitle;
         updatedTask.subTitle = payload.newSubTitle;
-        console.log(state.tasks)
     },
     completeTask(state, payload){
         const task = state.tasks.find((t) => t.id === payload);
