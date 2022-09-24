@@ -57,8 +57,8 @@ export default {
     },
     updateCurrentTask(updatedTask) {
       //console.log('updatedTask: ', updatedTask);
-      this.taskItem.title = updatedTask.newTitle;
-      this.taskItem.subTitle = updatedTask.newSubTitle;
+      // this.taskItem.title = updatedTask.newTitle;
+      // this.taskItem.subTitle = updatedTask.newSubTitle;
       this.$emit("update-task-item");
     },
     updateDueDateForCurrentTask(dueDate) {
