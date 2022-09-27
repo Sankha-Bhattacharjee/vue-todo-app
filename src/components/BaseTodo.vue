@@ -1,6 +1,6 @@
 <template>
   <v-list-item
-    @click="completeTaskItem(taskItem.id)"
+    @click="completeTaskItem"
     :class="{ 'blue lighten-4': taskItem.done }"
   >
     <template v-slot:default>
@@ -26,6 +26,7 @@
           @delete-current-task="deleteTaskItem"
           @update-date="updateDueDateForCurrentTask"
           :currentTask="taskItem"
+          v-if="!taskItem.done"
         />
       </v-list-item-action>
     </template>
@@ -49,20 +50,29 @@ export default {
     },
   },
   methods: {
-    completeTaskItem(id) {
-      this.$store.dispatch("completeCurrentTask", id);
+    completeTaskItem() {
+      this.$store.dispatch("completeCurrentTask", {
+        id: this.taskItem.id,
+        firebaseId: this.taskItem.firebaseId,
+        done: !this.taskItem.done
+      });
     },
     deleteTaskItem(id) {
+      this.$store.dispatch("deleteCurrentTask",{
+        id: id,
+        firebaseId: this.taskItem.firebaseId
+      })
       this.$emit("delete-taskitem", id);
     },
     updateCurrentTask(updatedTask) {
-      //console.log('updatedTask: ', updatedTask);
-      // this.taskItem.title = updatedTask.newTitle;
-      // this.taskItem.subTitle = updatedTask.newSubTitle;
       this.$emit("update-task-item");
     },
     updateDueDateForCurrentTask(dueDate) {
-      this.taskItem.dueDate = dueDate;
+      this.$store.dispatch("updateDueDate", {
+        newDueDate: dueDate,
+        id: this.taskItem.id,
+        firebaseId: this.taskItem.firebaseId
+      });
       this.$emit("update-due-date");
     },
   },

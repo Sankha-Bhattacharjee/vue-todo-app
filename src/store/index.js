@@ -11,29 +11,7 @@ const state = {
   userFirstName:'',
   userLastName: '',
   isAuthenticated: false,
-  tasks: [
-    {
-      id: 1,
-      title: "Wake up",
-      subTitle: "wake up at 7 AM",
-      dueDate: null,
-      done: false,
-    },
-    {
-      id: 2,
-      title: "Get groceries",
-      subTitle: "Grocery for evening party",
-      dueDate: null,
-      done: false,
-    },
-    {
-      id: 3,
-      title: "Get wine",
-      subTitle: "Wine for party",
-      dueDate: null,
-      done: false,
-    },
-  ],
+  tasks: [],
   searchedTasks:[]
 };
 

@@ -10,9 +10,13 @@ export default {
         updatedTask.title = payload.newTitle;
         updatedTask.subTitle = payload.newSubTitle;
     },
+    updateDueDate(state, payload){
+        const updatedDueDateTask =  state.tasks.find((t) => t.id === payload.id);
+        updatedDueDateTask.dueDate = payload.newDueDate;
+    },
     completeTask(state, payload){
-        const task = state.tasks.find((t) => t.id === payload);
-        task.done = !task.done;
+        const task = state.tasks.find((t) => t.id === payload.id);
+        task.done = payload.done;
 
     },
     deleteTask(state, payload){

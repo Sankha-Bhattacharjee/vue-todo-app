@@ -19,13 +19,36 @@ export default {
             const error = new Error("Failed to add new task! Please try again later.");
             throw error;
         }
-
-        context.commit("addNewTask", payload);
+        const response2 = await fetch(`https://todo-app-a4835-default-rtdb.firebaseio.com/users/${userId}/todos.json`);
+        const response2Data = await response2.json();
+        var firebaseIdOfNewlyAddedItem="";
+        for(let t in response2Data){
+            if(response2Data[t].id === payload.id){
+                firebaseIdOfNewlyAddedItem = t;
+            }
+        }
+        context.commit("addNewTask", {
+            ...payload,
+            firebaseId : firebaseIdOfNewlyAddedItem
+        });
     },
-    completeCurrentTask(context, payload) {
+    async completeCurrentTask(context, payload) {
+        const userId = context.getters.getUserId;
+
+        await fetch(`https://todo-app-a4835-default-rtdb.firebaseio.com/users/${userId}/todos/${payload.firebaseId}.json`,{
+            method: 'PATCH',
+            body: JSON.stringify({
+                done: payload.done,
+            })
+        });   
         context.commit("completeTask", payload);
     },
-    deleteCurrentTask(context, payload) {
+    async deleteCurrentTask(context, payload) {
+        const userId = context.getters.getUserId;
+
+        await fetch(`https://todo-app-a4835-default-rtdb.firebaseio.com/users/${userId}/todos/${payload.firebaseId}.json`,{
+            method: 'DELETE'
+        }); 
         context.commit("deleteTask", payload);
     },
     async signup(context, payload) {
@@ -99,9 +122,10 @@ export default {
 
         const tempTaskList=[];
         for(let t in responseData){
+            const currItemDueDate = responseData[t].dueDate ? responseData[t].dueDate : null;
             const task={
                 ...responseData[t],
-                dueDate: null,
+                dueDate: currItemDueDate,
                 firebaseId: t
             };
             tempTaskList.push(task);
@@ -119,5 +143,16 @@ export default {
             })
         });   
         context.commit("updateTaskDescription",payload);     
+    },
+    async updateDueDate(context, payload){
+        const userId = context.getters.getUserId;
+
+        await fetch(`https://todo-app-a4835-default-rtdb.firebaseio.com/users/${userId}/todos/${payload.firebaseId}.json`,{
+            method: 'PATCH',
+            body: JSON.stringify({
+                dueDate: payload.newDueDate,
+            })
+        });   
+        context.commit("updateDueDate",payload);
     }
 };
