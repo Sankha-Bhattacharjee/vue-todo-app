@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-btn class="ma-2" outlined color="primary" @click="toggleAddTaskForm">
+    <v-btn class="ma-2" outlined color="primary" @click="toggleAddTaskForm" v-if="isUserAuthenticated">
       {{ showAddFormButtonText }}
     </v-btn>
     <div v-if="showAddForm">
@@ -46,6 +46,9 @@ export default {
     showAddFormButtonText() {
       return this.showAddForm ? "Close" : "Add Todo";
     },
+    isUserAuthenticated(){
+      return this.$store.getters.getIsAuthenticated;
+    }
   },
   methods: {
     toggleAddTaskForm() {

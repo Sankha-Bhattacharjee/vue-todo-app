@@ -1,6 +1,16 @@
 <template>
   <div class="home pa-5">
-    <add-todo  @show-alert="showAlertForAddingTask" />
+    <v-card class="middleImageCard" v-if="!isUserLoggedIn">
+      <v-img
+        max-height="350"
+        max-width="350"
+        src="../assets/background.jpg"
+      ></v-img>
+      <v-card-title class="middleImageText title"
+        >Log in / Sign up to add new items</v-card-title
+      >
+    </v-card>
+    <add-todo @show-alert="showAlertForAddingTask" />
     <v-list flat three-line>
       <div v-for="task in taskList" :key="task.id">
         <base-todo
@@ -48,15 +58,18 @@ export default {
   },
   computed: {
     taskList() {
-      if(this.searchTodo !==""){
+      if (this.searchTodo !== "") {
         return this.$store.getters["getsearchedTaskList"];
       }
       return this.$store.getters["getTaskList"];
     },
+    isUserLoggedIn() {
+      return this.$store.getters.getIsAuthenticated;
+    },
   },
   methods: {
     filterTodos(val) {
-      console.log(this.$store.getters["getTaskList"],val);
+      console.log(this.$store.getters["getTaskList"], val);
       const searchedKey = val.toLowerCase();
       const filteredTodo = this.$store.getters["getTaskList"].filter(
         (t) =>
@@ -64,7 +77,7 @@ export default {
           t.subTitle.toLowerCase().includes(searchedKey)
       );
       console.log(filteredTodo);
-      this.$store.dispatch("updateTaskList",filteredTodo);
+      this.$store.dispatch("updateTaskList", filteredTodo);
     },
     updateTask() {
       const updateTaskMessage = "The task item has been updated.";
@@ -76,7 +89,7 @@ export default {
     },
     deleteTask(id) {
       //console.log("task deleted: ", id);
-      this.$store.dispatch("deleteCurrentTask",id);
+      this.$store.dispatch("deleteCurrentTask", id);
       const deleteMessage = "The item has been deleted.";
       this.showAlertMessageDialog(deleteMessage);
     },
@@ -94,3 +107,17 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.middleImageCard {
+  /* display: flex;
+  align-items: center;
+  justify-content: center; */
+  margin: 0 auto;
+  width: 350px;
+  box-shadow: none !important;
+}
+.middleImageText {
+  color: #1976d2 !important;
+}
+</style>
