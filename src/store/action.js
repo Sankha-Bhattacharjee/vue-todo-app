@@ -72,15 +72,15 @@ export default {
             id: userId,
             firstName: payload.firstName,
             lastName: payload.lastName,
+            isAuth: true
         })
 
     },
     async login(context, payload) {
-        const userId = context.getters.getUserId;
+        //const userId = context.getters.getUserId;
         const response = await fetch(`https://todo-app-a4835-default-rtdb.firebaseio.com/users.json`);
 
         const responseData = await response.json();
-         //console.log(responseData, payload)
 
         if (!response.ok) {
             const error = new Error("Failed to Authenticate!");
@@ -88,12 +88,14 @@ export default {
         }
         
         var selectedUser = null;
+        var userId = null;
         for(let user in responseData) {
             const currentUser = responseData[user];
             // console.log("current usr", currentUser)
             if(currentUser.email == payload.enteredEmail && currentUser.password == payload.enteredPassword){
                 selectedUser = currentUser;
-                // console.log(selectedUser)
+                userId = user;
+                //console.log(selectedUser, user)
                 break;
             }else{
                 console.log(currentUser.email,payload.enteredEmail)
@@ -101,11 +103,16 @@ export default {
                 throw error;
             }
         }
+        //store data in browser local storage
+        localStorage.setItem("userId",userId);
+        localStorage.setItem("firstName",selectedUser.firstName);
+        localStorage.setItem("lastName",selectedUser.lastName);
 
         context.commit("setUser", {
             id: userId,
             firstName: selectedUser.firstName,
             lastName: selectedUser.lastName,
+            isAuth: true
         })
 
     },
@@ -154,5 +161,32 @@ export default {
             })
         });   
         context.commit("updateDueDate",payload);
+    },
+    autoLogin(context){
+        // get data from browser local storage
+        const userIdInLocalStorage = localStorage.getItem("userId");
+        const firstNameInLocalStorage = localStorage.getItem("firstName");
+        const lastNameInLocalStorage = localStorage.getItem("lastName");
+        if(userIdInLocalStorage && firstNameInLocalStorage && lastNameInLocalStorage){
+            context.commit("setUser",{
+                id: userIdInLocalStorage,
+                firstName: firstNameInLocalStorage,
+                lastName: lastNameInLocalStorage,
+                isAuth: true
+            })
+            context.dispatch("fetchTodos");
+        }
+    },
+    logout(context){
+        localStorage.removeItem("userId");
+        localStorage.removeItem("firstName");
+        localStorage.removeItem("lastName");
+
+        context.commit("setUser",{
+            id: null,
+            firstName: '',
+            lastName: '',
+            isAuth: false
+        })
     }
 };

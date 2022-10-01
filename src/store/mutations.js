@@ -25,8 +25,8 @@ export default {
     }, 
     setUser(state, payload){
         state.userId = payload.id;
-        state.userFirstName = payload.firstName,
-        state.userLastName = payload.lastName,
-        state.isAuthenticated = true
+        state.userFirstName = payload.firstName;
+        state.userLastName = payload.lastName;
+        state.isAuthenticated = payload.isAuth;
     }
 };
