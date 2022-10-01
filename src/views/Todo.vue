@@ -7,7 +7,9 @@
         src="../assets/background.jpg"
       ></v-img>
       <v-card-title class="middleImageText title"
-        >Log in / Sign up to add new items</v-card-title
+        ><router-link to="/auth" class="mr-1">LogIn</router-link> /
+        <router-link to="/auth" class="mr-1 ml-1">SignUp</router-link>to add new
+        items</v-card-title
       >
     </v-card>
     <add-todo @show-alert="showAlertForAddingTask" />
@@ -59,9 +61,9 @@ export default {
   computed: {
     taskList() {
       if (this.searchTodo !== "") {
-        return this.$store.getters["getsearchedTaskList"];
+        return this.$store.getters.getsearchedTaskList;
       }
-      return this.$store.getters["getTaskList"];
+      return this.$store.getters.getTaskList;
     },
     isUserLoggedIn() {
       return this.$store.getters.getIsAuthenticated;
