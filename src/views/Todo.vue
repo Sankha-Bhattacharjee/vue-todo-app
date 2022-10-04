@@ -12,6 +12,7 @@
         items</v-card-title
       >
     </v-card>
+    <div v-else>
     <add-todo @show-alert="showAlertForAddingTask" />
     <v-list flat three-line>
       <div v-for="task in taskList" :key="task.id">
@@ -29,6 +30,7 @@
       :showAlert="showAlertMessage"
       @close-alert="closeAlertDialog"
     />
+    </div>
   </div>
 </template>
 
@@ -60,9 +62,6 @@ export default {
   },
   computed: {
     taskList() {
-      if (this.searchTodo !== "") {
-        return this.$store.getters.getsearchedTaskList;
-      }
       return this.$store.getters.getTaskList;
     },
     isUserLoggedIn() {
@@ -71,15 +70,8 @@ export default {
   },
   methods: {
     filterTodos(val) {
-      console.log(this.$store.getters["getTaskList"], val);
       const searchedKey = val.toLowerCase();
-      const filteredTodo = this.$store.getters["getTaskList"].filter(
-        (t) =>
-          t.title.toLowerCase().includes(searchedKey) ||
-          t.subTitle.toLowerCase().includes(searchedKey)
-      );
-      console.log(filteredTodo);
-      this.$store.dispatch("updateTaskList", filteredTodo);
+      this.$store.dispatch("filterTaskList", searchedKey);
     },
     updateTask() {
       const updateTaskMessage = "The task item has been updated.";

@@ -7,12 +7,11 @@ import actions from './action.js'
 Vue.use(Vuex);
 
 const state = {
-  userId: 't1',
+  userId: null,
   userFirstName:'',
   userLastName: '',
   isAuthenticated: false,
-  tasks: [],
-  searchedTasks:[]
+  tasks: []
 };
 
 const store = new Vuex.Store({

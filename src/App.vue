@@ -101,7 +101,7 @@ export default {
       }
     },
     computeIsLoggedInMessage(){
-      if(this.isLoggedIn){
+      if(this.$store.getters.getIsAuthenticated){
         return "Logged in";
       }else{
         return "Signup/Login";
