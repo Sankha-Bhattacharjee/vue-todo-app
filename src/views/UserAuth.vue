@@ -34,7 +34,7 @@
         required
       ></v-text-field>
       <span v-if="isError">{{errorText}}<br></span>
-      <v-btn color="primary" type="submit" class="mr-5">{{button1Text}}</v-btn>
+      <v-btn color="primary" type="submit" class="mr-5" >{{button1Text}}</v-btn>
       <v-btn color="blue lighten-3" type="button" @click="toggleMode">{{button2Text}}</v-btn>
     </v-container>
   </v-form>
@@ -123,7 +123,6 @@ export default {
             enteredPassword: this.password
           });
           this.$router.replace("/");
-          this.$store.dispatch("fetchTodos");
         }
       }
     }
