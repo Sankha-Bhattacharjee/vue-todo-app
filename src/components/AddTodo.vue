@@ -34,6 +34,7 @@
 
 <script>
 export default {
+  emits:["toggle-loader", "show-alert"],
   data() {
     return {
       showAddForm: false,
@@ -62,11 +63,13 @@ export default {
       }
     },
     submitTask() {
+      this.$emit("toggle-loader",true);
       const isuserLoggedIn = this.$store.getters.getIsAuthenticated;
       let message = "";
       if (!this.newTaskTitle || !this.newTaskSubTitle) {
         message = "This is a mandatory field";
       } else if(isuserLoggedIn) {
+        this.showAddForm = false;
         const newTask = {
           id: Date.now().toString(),
           title: this.newTaskTitle,
@@ -82,9 +85,7 @@ export default {
       }else{
         this.$router.replace("/auth");
       }
-      this.showAddForm = false;
       this.$emit("show-alert", message);
-
     },
   },
 };

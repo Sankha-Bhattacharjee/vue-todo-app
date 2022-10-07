@@ -13,23 +13,26 @@
       >
     </v-card>
     <div v-else>
-    <add-todo @show-alert="showAlertForAddingTask" />
-    <v-list flat three-line>
-      <div v-for="task in taskList" :key="task.id">
-        <base-todo
-          :task-item="task"
-          @update-task-item="updateTask"
-          @update-due-date="updateDueDate"
-          @delete-taskitem="deleteTask"
+      <base-loader v-if="isLoadingSpinner" />
+      <div v-else>
+        <add-todo @show-alert="showAlertForAddingTask" @toggle-loader="toggleLoaderSpinner"/>
+        <v-list flat three-line>
+          <div v-for="task in taskList" :key="task.id">
+            <base-todo
+              :task-item="task"
+              @update-task-item="updateTask"
+              @update-due-date="updateDueDate"
+              @delete-taskitem="deleteTask"
+            />
+            <v-divider></v-divider>
+          </div>
+        </v-list>
+        <alert-dialog
+          :message="alertMessage"
+          :showAlert="showAlertMessage"
+          @close-alert="closeAlertDialog"
         />
-        <v-divider></v-divider>
       </div>
-    </v-list>
-    <alert-dialog
-      :message="alertMessage"
-      :showAlert="showAlertMessage"
-      @close-alert="closeAlertDialog"
-    />
     </div>
   </div>
 </template>
@@ -49,6 +52,7 @@ export default {
     return {
       alertMessage: "",
       showAlertMessage: false,
+      isLoading: false
     };
   },
   watch: {
@@ -67,8 +71,16 @@ export default {
     isUserLoggedIn() {
       return this.$store.getters.getIsAuthenticated;
     },
+    isLoadingSpinner(){
+      //console.log(this.isLoading)
+      return this.isLoading;
+    }
   },
   methods: {
+    toggleLoaderSpinner(val){
+      this.isLoading = val;
+      //console.log("loading method", this.isLoading)
+    },
     filterTodos(val) {
       const searchedKey = val.toLowerCase();
       this.$store.dispatch("filterTaskList", searchedKey);
@@ -89,6 +101,7 @@ export default {
     },
     showAlertForAddingTask(msg) {
       this.showAlertMessageDialog(msg);
+      this.isLoading = false;
     },
     showAlertMessageDialog(msg) {
       this.showAlertMessage = false;

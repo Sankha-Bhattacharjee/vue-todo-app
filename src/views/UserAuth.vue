@@ -1,5 +1,6 @@
 <template>
-  <v-form v-model="valid" @submit.prevent="submitForm">
+<base-loader v-if="toggleLodingSpinner"/>
+  <v-form v-model="valid" @submit.prevent="submitForm" v-else>
     <v-container>
       <v-text-field
         v-model="firstname"
@@ -44,6 +45,7 @@
 export default {
   data() {
     return {
+      loading: false,
       mode: "signup",
       valid: false,
       firstname: "",
@@ -71,6 +73,9 @@ export default {
     };
   },
   computed:{
+    toggleLodingSpinner(){
+      return this.loading;
+    },
     button1Text(){
       if(this.mode === "signup"){
         return "Signup";
@@ -95,7 +100,8 @@ export default {
         this.mode ="signup";
       }
     },
-    submitForm(){
+    async submitForm(){
+      this.loading = true;
       if(this.mode === "signup"){
         if(!this.firstname || !this.lastname || !this.email || !this.password){
           this.isError = true;
@@ -103,12 +109,13 @@ export default {
           console.log(this.errorText);
         }else{
           //signup logic
-          this.$store.dispatch("signup",{
+          await this.$store.dispatch("signup",{
               email: this.email,
               password: this.password,
               firstName: this.firstname,
               lastName: this.lastname
           });
+          this.loading = false;
           this.$router.replace("/");
         }
       }else if(this.mode==="login"){
@@ -118,10 +125,11 @@ export default {
           console.log(this.errorText);
         }else{
           //login logic
-          this.$store.dispatch("login",{
+          await this.$store.dispatch("login",{
             enteredEmail: this.email,
             enteredPassword: this.password
           });
+          //this.loading = false;
           this.$router.replace("/");
         }
       }
