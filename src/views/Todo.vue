@@ -1,4 +1,6 @@
 <template>
+<div>
+<base-loader v-if="isLoading" />
   <div class="home pa-5">
     <v-card class="middleImageCard" v-if="!isUserLoggedIn">
       <v-img
@@ -13,8 +15,7 @@
       >
     </v-card>
     <div v-else>
-      <base-loader v-if="isLoadingSpinner" />
-      <div v-else>
+      <div>
         <add-todo @show-alert="showAlertForAddingTask" @toggle-loader="toggleLoaderSpinner"/>
         <v-list flat three-line>
           <div v-for="task in taskList" :key="task.id">
@@ -23,6 +24,7 @@
               @update-task-item="updateTask"
               @update-due-date="updateDueDate"
               @delete-taskitem="deleteTask"
+              @loading-spinner="toggleLoaderSpinner"
             />
             <v-divider></v-divider>
           </div>
@@ -35,6 +37,7 @@
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -71,31 +74,33 @@ export default {
     isUserLoggedIn() {
       return this.$store.getters.getIsAuthenticated;
     },
-    isLoadingSpinner(){
-      //console.log(this.isLoading)
-      return this.isLoading;
-    }
   },
   methods: {
     toggleLoaderSpinner(val){
       this.isLoading = val;
       //console.log("loading method", this.isLoading)
     },
-    filterTodos(val) {
+    async filterTodos(val) {
+      this.isLoading = true;
       const searchedKey = val.toLowerCase();
-      this.$store.dispatch("filterTaskList", searchedKey);
+      await this.$store.dispatch("filterTaskList", searchedKey);
+      this.isLoading = false;
     },
     updateTask() {
+      this.isLoading = false;
       const updateTaskMessage = "The task item has been updated.";
       this.showAlertMessageDialog(updateTaskMessage);
     },
     updateDueDate() {
+      this.isLoading = false;
       const dueDateMessage = "Due date has been updated";
       this.showAlertMessageDialog(dueDateMessage);
     },
-    deleteTask(id) {
+    async deleteTask(id) {
+      this.isLoading = true;
       //console.log("task deleted: ", id);
-      this.$store.dispatch("deleteCurrentTask", id);
+      await this.$store.dispatch("deleteCurrentTask", id);
+      this.isLoading = false;
       const deleteMessage = "The item has been deleted.";
       this.showAlertMessageDialog(deleteMessage);
     },

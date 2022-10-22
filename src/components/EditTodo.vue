@@ -46,10 +46,11 @@
 </template>
 <script>
 export default {
-  emit: ["edited-task", "close-menu"],
+  emit: ["edited-task", "close-menu","enable-loading"],
   props: ["currentTaskItem"],
   data() {
     return {
+      loading: false,
       editDialog: false,
       currentTaskItemTitle: "",
       currentTaskItemSubTitle: "",
@@ -76,7 +77,9 @@ export default {
       this.fetchCurrentTask();
       this.$emit("close-menu");
     },
-    save() {
+    async save() {
+      this.editDialog = false;
+      this.$emit("enable-loading",true);
       //console.log("Saved: ", this.task);
       const updatedTask = {
         firebaseId: this.currentTaskItem.firebaseId,
@@ -84,9 +87,8 @@ export default {
         newTitle: this.currentTaskItemTitle,
         newSubTitle: this.currentTaskItemSubTitle,
       };
-      this.$store.dispatch("updateTodoDescription",updatedTask);
+      await this.$store.dispatch("updateTodoDescription",updatedTask);
       this.$emit("edited-task");
-      this.editDialog = false;
       this.$emit("close-menu");
     },
   },

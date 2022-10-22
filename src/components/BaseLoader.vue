@@ -18,9 +18,10 @@
 .backdrop {
   content: "";
   display: block;
+  position: absolute;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   z-index: 9999 !important;
-  background-color: rgba(165, 159, 159, 0.5);
+  background-color: rgba(163, 155, 155, 0.5);
 }
 </style>

@@ -115,7 +115,6 @@ export default {
               firstName: this.firstname,
               lastName: this.lastname
           });
-          this.loading = false;
           this.$router.replace("/");
         }
       }else if(this.mode==="login"){
@@ -129,7 +128,7 @@ export default {
             enteredEmail: this.email,
             enteredPassword: this.password
           });
-          //this.loading = false;
+          this.loading = false;
           this.$router.replace("/");
         }
       }

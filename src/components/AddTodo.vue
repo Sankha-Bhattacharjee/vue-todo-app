@@ -62,7 +62,7 @@ export default {
         this.invalid = true;
       }
     },
-    submitTask() {
+    async submitTask() {
       this.$emit("toggle-loader",true);
       const isuserLoggedIn = this.$store.getters.getIsAuthenticated;
       let message = "";
@@ -77,7 +77,7 @@ export default {
           dueDate: null,
           done: false,
         };
-        this.$store.dispatch("addNewTaskToTaskList", newTask);
+        await this.$store.dispatch("addNewTaskToTaskList", newTask);
         this.newTaskTitle = "";
         this.newTaskSubTitle = "";
         this.showAlert = true;
