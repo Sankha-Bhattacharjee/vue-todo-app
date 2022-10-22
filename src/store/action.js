@@ -67,9 +67,9 @@ export default {
         context.commit("deleteTask", payload);
     },
     async signup(context, payload) {
-        const userId = context.getters.getUserId;
-        const response = await fetch(`https://todo-app-a4835-default-rtdb.firebaseio.com/users/${userId}.json`, {
-            method: 'PUT',
+        //const userId = Date.now().toString();
+        const response = await fetch(`https://todo-app-a4835-default-rtdb.firebaseio.com/users.json`, {
+            method: 'POST',
             body: JSON.stringify({
                 email: payload.email,
                 password: payload.password,
@@ -83,13 +83,10 @@ export default {
             throw error;
         }
 
-        context.commit("setUser", {
-            id: userId,
-            firstName: payload.firstName,
-            lastName: payload.lastName,
-            isAuth: true
+        context.dispatch("login", {
+            enteredEmail: payload.email,
+            enteredPassword: payload.password
         })
-
     },
     async login(context, payload) {
         //const userId = context.getters.getUserId;
@@ -111,12 +108,12 @@ export default {
                 selectedUser = currentUser;
                 userId = user;
                 //console.log(selectedUser, user)
-                break;
-            } else {
-                console.log(currentUser.email, payload.enteredEmail)
-                const error = new Error("Failed to Authenticate!");
-                throw error;
-            }
+                break;}
+            // } else {
+            //    // console.log(currentUser.email, payload.enteredEmail)
+            //     const error = new Error("Failed to Authenticate!");
+            //     throw error;
+            // }
         }
         //store data in browser local storage
         localStorage.setItem("userId", userId);

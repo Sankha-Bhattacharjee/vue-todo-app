@@ -121,7 +121,7 @@ export default {
       this.searchTodoKey = val;
     },
     logout(){
-      this.$store.dispatch("logout");
+    this.$store.dispatch("logout");
     }
   },
 };

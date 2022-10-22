@@ -25,6 +25,7 @@
           @update-task="updateCurrentTask"
           @delete-current-task="deleteTaskItem"
           @update-date="updateDueDateForCurrentTask"
+          @show-loading-spinner="showLoadingSpinner"
           :currentTask="taskItem"
           v-if="!taskItem.done"
         />
@@ -36,7 +37,7 @@
 <script>
 import OptionsMenu from "./OptionsMenu.vue";
 export default {
-  emit: ["delete-taskitem", "update-task-item","update-due-date"],
+  emit: ["delete-taskitem", "update-task-item","update-due-date","loading-spinner"],
   props: ["taskItem"],
   components: {
     OptionsMenu,
@@ -50,12 +51,17 @@ export default {
     },
   },
   methods: {
-    completeTaskItem() {
-      this.$store.dispatch("completeCurrentTask", {
+    showLoadingSpinner(val){
+      this.$emit("loading-spinner",val);
+    },
+    async completeTaskItem() {
+      this.$emit("loading-spinner",true);
+      await this.$store.dispatch("completeCurrentTask", {
         id: this.taskItem.id,
         firebaseId: this.taskItem.firebaseId,
         done: !this.taskItem.done
       });
+      this.$emit("loading-spinner",false);
     },
     deleteTaskItem(id) {
       this.$store.dispatch("deleteCurrentTask",{
@@ -67,8 +73,9 @@ export default {
     updateCurrentTask(updatedTask) {
       this.$emit("update-task-item");
     },
-    updateDueDateForCurrentTask(dueDate) {
-      this.$store.dispatch("updateDueDate", {
+    async updateDueDateForCurrentTask(dueDate) {
+      this.$emit("loading-spinner",true);
+      await this.$store.dispatch("updateDueDate", {
         newDueDate: dueDate,
         id: this.taskItem.id,
         firebaseId: this.taskItem.firebaseId

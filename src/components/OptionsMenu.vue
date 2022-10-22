@@ -15,6 +15,7 @@
         <edit-todo
           @edited-task="editTask"
           @close-menu="closeMenu"
+          @enable-loading="enableLoading"
           :currentTaskItem="currentTask"
         />
       </v-list-item>
@@ -37,7 +38,7 @@ import EditTodo from "./EditTodo.vue";
 import DeleteTodo from "./DeleteTodo.vue";
 import DueDate from "./DueDate.vue";
 export default {
-  emit: ["update-task", "delete-current-task","update-date"],
+  emit: ["update-task", "delete-current-task","update-date","show-loading-spinner"],
   props: ["currentTask"],
   components: {
     EditTodo,
@@ -55,6 +56,9 @@ export default {
     };
   },
   methods: {
+    enableLoading(val){
+      this.$emit("show-loading-spinner",val);
+    },
     editTask(task) {
       //console.log("editTask", task);
       this.$emit("update-task", task);
