@@ -25,6 +25,7 @@
               @update-due-date="updateDueDate"
               @delete-taskitem="deleteTask"
               @loading-spinner="toggleLoaderSpinner"
+              @fail-update="showFailUpdateMessage"
             />
             <v-divider></v-divider>
           </div>
@@ -82,8 +83,13 @@ export default {
     },
     async filterTodos(val) {
       this.isLoading = true;
-      const searchedKey = val.toLowerCase();
-      await this.$store.dispatch("filterTaskList", searchedKey);
+      try {
+        const searchedKey = val.toLowerCase();
+        await this.$store.dispatch("filterTaskList", searchedKey);
+      } catch (err) {
+        this.showAlertMessageDialog(err.message);
+      }
+      
       this.isLoading = false;
     },
     updateTask() {
@@ -97,9 +103,6 @@ export default {
       this.showAlertMessageDialog(dueDateMessage);
     },
     async deleteTask(id) {
-      this.isLoading = true;
-      //console.log("task deleted: ", id);
-      await this.$store.dispatch("deleteCurrentTask", id);
       this.isLoading = false;
       const deleteMessage = "The item has been deleted.";
       this.showAlertMessageDialog(deleteMessage);
@@ -107,6 +110,16 @@ export default {
     showAlertForAddingTask(msg) {
       this.showAlertMessageDialog(msg);
       this.isLoading = false;
+    },
+    showFailUpdateMessage(type=0){
+      this.isLoading = false;
+      let failedUpdateMessage=""
+      if(type===0){
+        failedUpdateMessage = "Failed to update, try again later!";
+      }else if(type===1){
+        failedUpdateMessage = "Failed to delete, try again later!";
+      }
+      this.showAlertMessageDialog(failedUpdateMessage);
     },
     showAlertMessageDialog(msg) {
       this.showAlertMessage = false;

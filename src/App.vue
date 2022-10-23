@@ -58,10 +58,12 @@
 
       <v-spacer></v-spacer>
 
-      <search-todo v-if="isSearchTextBox" @search-todo="searchParticularTodo"/>
-      <v-btn icon v-else>
-        <v-icon @click="toggleSearchTextBox">mdi-magnify</v-icon>
-      </v-btn>
+        <search-todo v-if="isSearchTextBox && isLoggedIn" @search-todo="searchParticularTodo"/>
+        <v-btn icon v-else>
+          <v-icon @click="toggleSearchTextBox">mdi-magnify</v-icon>
+        </v-btn>
+ 
+      
     </v-app-bar>
 
     <v-main>

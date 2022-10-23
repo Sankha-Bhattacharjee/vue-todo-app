@@ -16,6 +16,7 @@
           @edited-task="editTask"
           @close-menu="closeMenu"
           @enable-loading="enableLoading"
+          @update-fail="failedUpdate"
           :currentTaskItem="currentTask"
         />
       </v-list-item>
@@ -38,7 +39,7 @@ import EditTodo from "./EditTodo.vue";
 import DeleteTodo from "./DeleteTodo.vue";
 import DueDate from "./DueDate.vue";
 export default {
-  emit: ["update-task", "delete-current-task","update-date","show-loading-spinner"],
+  emit: ["update-task", "delete-current-task","update-date","show-loading-spinner","fail-update"],
   props: ["currentTask"],
   components: {
     EditTodo,
@@ -71,6 +72,9 @@ export default {
     },
     updateDueDate(dueDate){
       this.$emit("update-date", dueDate);
+    },
+    failedUpdate(){
+      this.$emit("fail-update");
     }
   },
 };

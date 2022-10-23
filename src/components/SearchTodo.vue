@@ -2,7 +2,6 @@
   <v-text-field
     v-model="searchKey"
     placeholder="Search..."
-    clearable
   ></v-text-field>
 </template>
 

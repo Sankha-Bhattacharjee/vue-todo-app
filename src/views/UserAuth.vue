@@ -1,4 +1,5 @@
 <template>
+<div>
 <base-loader v-if="toggleLodingSpinner"/>
   <v-form v-model="valid" @submit.prevent="submitForm" v-else>
     <v-container>
@@ -34,17 +35,31 @@
         type="password"
         required
       ></v-text-field>
-      <span v-if="isError">{{errorText}}<br></span>
+      <span v-if="isError" class="errorTextStyle">{{errorText}}<br></span>
       <v-btn color="primary" type="submit" class="mr-5" >{{button1Text}}</v-btn>
       <v-btn color="blue lighten-3" type="button" @click="toggleMode">{{button2Text}}</v-btn>
     </v-container>
   </v-form>
+  <div>
+    <alert-dialog
+          :message="alertMessage"
+          :showAlert="showAlertMessage"
+          @close-alert="closeAlertDialog"
+        />
+  </div>
+  </div>
 </template>
 
 <script>
+import AlertDialog from '../components/AlertDialog.vue';
 export default {
+  components:{
+    AlertDialog
+  },
   data() {
     return {
+      alertMessage: "",
+      showAlertMessage: false,
       loading: false,
       mode: "signup",
       valid: false,
@@ -101,13 +116,14 @@ export default {
       }
     },
     async submitForm(){
-      this.loading = true;
-      if(this.mode === "signup"){
+      try{
+        if(this.mode === "signup"){
         if(!this.firstname || !this.lastname || !this.email || !this.password){
           this.isError = true;
           this.errorText = "Please enter all the required details!";
-          console.log(this.errorText);
+          //console.log(this.errorText);
         }else{
+          this.loading = true;
           //signup logic
           await this.$store.dispatch("signup",{
               email: this.email,
@@ -123,6 +139,7 @@ export default {
           this.errorText = "Please enter all the required details!";
           console.log(this.errorText);
         }else{
+          this.loading = true;
           //login logic
           await this.$store.dispatch("login",{
             enteredEmail: this.email,
@@ -132,7 +149,17 @@ export default {
           this.$router.replace("/");
         }
       }
-    }
+      }catch(err){
+        this.loading = false;
+        this.showAlertMessage = false;
+        this.alertMessage = err.message;
+        this.showAlertMessage = true;
+      }
+      
+    },
+    closeAlertDialog() {
+      this.showAlertMessage = false;
+    },
   }
 };
 </script>
@@ -145,5 +172,8 @@ export default {
   border-radius: 15px;
   box-shadow: 3px 3px 3px grey;
   border: 1px solid rgb(192, 186, 186);
+}
+.errorTextStyle{
+  color: red;
 }
 </style>

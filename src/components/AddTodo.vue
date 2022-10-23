@@ -63,13 +63,14 @@ export default {
       }
     },
     async submitTask() {
-      this.$emit("toggle-loader",true);
       const isuserLoggedIn = this.$store.getters.getIsAuthenticated;
       let message = "";
       if (!this.newTaskTitle || !this.newTaskSubTitle) {
         message = "This is a mandatory field";
       } else if(isuserLoggedIn) {
-        this.showAddForm = false;
+        this.$emit("toggle-loader",true);
+        try {
+          this.showAddForm = false;
         const newTask = {
           id: Date.now().toString(),
           title: this.newTaskTitle,
@@ -82,6 +83,9 @@ export default {
         this.newTaskSubTitle = "";
         this.showAlert = true;
         message = "New Task has been added";
+        } catch (err) {
+          message = err.message;
+        }
       }else{
         this.$router.replace("/auth");
       }

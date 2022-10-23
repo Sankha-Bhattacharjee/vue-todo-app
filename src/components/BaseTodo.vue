@@ -14,7 +14,11 @@
         <v-list-item-title>{{ taskItem.title }} </v-list-item-title>
         <v-list-item-subtitle>
           {{ taskItem.subTitle }}
-          <v-row justify="end" class="mr-10 pb-5 font-weight-light text-body-2" v-if="isDueDateSet">
+          <v-row
+            justify="end"
+            class="mr-10 pb-5 font-weight-light text-body-2"
+            v-if="isDueDateSet"
+          >
             <v-icon small>mdi-calendar</v-icon> Due Date:
             {{ calculatedDueDate }}
           </v-row>
@@ -26,6 +30,7 @@
           @delete-current-task="deleteTaskItem"
           @update-date="updateDueDateForCurrentTask"
           @show-loading-spinner="showLoadingSpinner"
+          @fail-update="emitFailUpdate"
           :currentTask="taskItem"
           v-if="!taskItem.done"
         />
@@ -37,7 +42,7 @@
 <script>
 import OptionsMenu from "./OptionsMenu.vue";
 export default {
-  emit: ["delete-taskitem", "update-task-item","update-due-date","loading-spinner"],
+  emit: ["delete-taskitem","update-task-item","update-due-date","loading-spinner","fail-update"],
   props: ["taskItem"],
   components: {
     OptionsMenu,
@@ -51,36 +56,53 @@ export default {
     },
   },
   methods: {
-    showLoadingSpinner(val){
-      this.$emit("loading-spinner",val);
+    showLoadingSpinner(val) {
+      this.$emit("loading-spinner", val);
+    },
+    emitFailUpdate() {
+      this.$emit("fail-update");
     },
     async completeTaskItem() {
-      this.$emit("loading-spinner",true);
-      await this.$store.dispatch("completeCurrentTask", {
+      this.$emit("loading-spinner", true);
+      try {
+        await this.$store.dispatch("completeCurrentTask", {
         id: this.taskItem.id,
         firebaseId: this.taskItem.firebaseId,
-        done: !this.taskItem.done
+        done: !this.taskItem.done,
       });
-      this.$emit("loading-spinner",false);
+      } catch (error) {
+        this.$emit("fail-update");
+      }
+      this.$emit("loading-spinner", false);
     },
-    deleteTaskItem(id) {
-      this.$store.dispatch("deleteCurrentTask",{
+    async deleteTaskItem(id) {
+      this.$emit("loading-spinner", true);
+      try {
+        await this.$store.dispatch("deleteCurrentTask", {
         id: id,
-        firebaseId: this.taskItem.firebaseId
-      })
+        firebaseId: this.taskItem.firebaseId,
+      });
       this.$emit("delete-taskitem", id);
+      } catch (err) {
+        this.$emit("fail-update",1);
+      }
+      
     },
     updateCurrentTask(updatedTask) {
       this.$emit("update-task-item");
     },
     async updateDueDateForCurrentTask(dueDate) {
-      this.$emit("loading-spinner",true);
-      await this.$store.dispatch("updateDueDate", {
+      this.$emit("loading-spinner", true);
+      try {
+        await this.$store.dispatch("updateDueDate", {
         newDueDate: dueDate,
         id: this.taskItem.id,
-        firebaseId: this.taskItem.firebaseId
+        firebaseId: this.taskItem.firebaseId,
       });
       this.$emit("update-due-date");
+      } catch (error) {
+        this.$emit("fail-update");
+      }
     },
   },
 };
