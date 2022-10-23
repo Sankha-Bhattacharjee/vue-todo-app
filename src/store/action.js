@@ -50,20 +50,28 @@ export default {
     async completeCurrentTask(context, payload) {
         const userId = context.getters.getUserId;
 
-        await fetch(`https://todo-app-a4835-default-rtdb.firebaseio.com/users/${userId}/todos/${payload.firebaseId}.json`, {
+        const response = await fetch(`https://todo-app-a4835-default-rtdb.firebaseio.com/users/${userId}/todos/${payload.firebaseId}.json`, {
             method: 'PATCH',
             body: JSON.stringify({
                 done: payload.done,
             })
         });
+        if (!response.ok) {
+            const error = new Error("Failed to update!");
+            throw error;
+        }
         context.commit("completeTask", payload);
     },
     async deleteCurrentTask(context, payload) {
         const userId = context.getters.getUserId;
 
-        await fetch(`https://todo-app-a4835-default-rtdb.firebaseio.com/users/${userId}/todos/${payload.firebaseId}.json`, {
+        const response = await fetch(`https://todo-app-a4835-default-rtdb.firebaseio.com/users/${userId}/todos/${payload.firebaseId}.json`, {
             method: 'DELETE'
         });
+        if(!response.ok){
+            const error = new Error("Failed to delete!");
+            throw error;
+        }
         context.commit("deleteTask", payload);
     },
     async signup(context, payload) {
@@ -108,13 +116,15 @@ export default {
                 selectedUser = currentUser;
                 userId = user;
                 //console.log(selectedUser, user)
-                break;}
-            // } else {
-            //    // console.log(currentUser.email, payload.enteredEmail)
-            //     const error = new Error("Failed to Authenticate!");
-            //     throw error;
-            // }
+                break;
+            }
         }
+            if(!selectedUser && !userId){
+               // console.log(currentUser.email, payload.enteredEmail)
+                const error = new Error("Failed to Authenticate!");
+                throw error;
+    }
+
         //store data in browser local storage
         localStorage.setItem("userId", userId);
         localStorage.setItem("firstName", selectedUser.firstName);
@@ -155,24 +165,32 @@ export default {
     async updateTodoDescription(context, payload) {
         const userId = context.getters.getUserId;
 
-        await fetch(`https://todo-app-a4835-default-rtdb.firebaseio.com/users/${userId}/todos/${payload.firebaseId}.json`, {
+        const response = await fetch(`https://todo-app-a4835-default-rtdb.firebaseio.com/users/${userId}/todos/${payload.firebaseId}.json`, {
             method: 'PATCH',
             body: JSON.stringify({
                 title: payload.newTitle,
                 subTitle: payload.newSubTitle
             })
         });
+        if (!response.ok) {
+            const error = new Error("Failed to update!");
+            throw error;
+        }
         context.commit("updateTaskDescription", payload);
     },
     async updateDueDate(context, payload) {
         const userId = context.getters.getUserId;
 
-        await fetch(`https://todo-app-a4835-default-rtdb.firebaseio.com/users/${userId}/todos/${payload.firebaseId}.json`, {
+        const response = await fetch(`https://todo-app-a4835-default-rtdb.firebaseio.com/users/${userId}/todos/${payload.firebaseId}.json`, {
             method: 'PATCH',
             body: JSON.stringify({
                 dueDate: payload.newDueDate,
             })
         });
+        if (!response.ok) {
+            const error = new Error("Failed to update!");
+            throw error;
+        }
         context.commit("updateDueDate", payload);
     },
     autoLogin(context) {
