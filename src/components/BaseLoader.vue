@@ -24,4 +24,10 @@
   z-index: 9999 !important;
   background-color: rgba(163, 155, 155, 0.5);
 }
+@media only screen and (max-width: 480px){
+  .v-progress-circular {
+  left: 35%;
+  top: 30%;
+}
+}
 </style>

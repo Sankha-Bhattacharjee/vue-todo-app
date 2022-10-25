@@ -11,7 +11,7 @@
       color="primary"
       v-model="picker"
       :min="currentDate"
-      :show-current="false"
+      :show-current="true"
     >
       <v-row justify="end" class="mb-2">
         <v-btn color="primary" text @click="closeDate">Cancel</v-btn>

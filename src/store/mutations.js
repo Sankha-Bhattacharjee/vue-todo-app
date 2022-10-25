@@ -20,7 +20,7 @@ export default {
 
     },
     deleteTask(state, payload){
-        const filteredTask =  state.tasks.filter((t) => t.id !== payload)
+        const filteredTask =  state.tasks.filter((t) => t.id !== payload.id)
         state.tasks = filteredTask;
     }, 
     setUser(state, payload){

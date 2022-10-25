@@ -22,20 +22,20 @@
             <v-col cols="12" sm="6" md="4">
               <v-text-field
                 v-model="currentTaskItemTitle"
-                label="Enter Task Title"
+                label="Enter Task Title*"
               ></v-text-field
             ></v-col>
             <v-col cols="12" sm="6" md="4">
               <v-text-field
                 v-model="currentTaskItemSubTitle"
-                label="Enter Task Subtitle"
+                label="Enter Task Subtitle*"
               >
               </v-text-field>
             </v-col>
           </v-row>
         </v-container>
       </v-card-text>
-
+      <span v-if="isError" class="errorTextStyle ml-6">{{errorText}}</span>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="blue darken-1" text @click="close"> Cancel </v-btn>
@@ -54,6 +54,8 @@ export default {
       editDialog: false,
       currentTaskItemTitle: "",
       currentTaskItemSubTitle: "",
+      errorText: "",
+      isError: false
     };
   },
   watch: {
@@ -78,24 +80,36 @@ export default {
       this.$emit("close-menu");
     },
     async save() {
-      try {
-        this.editDialog = false;
-        this.$emit("enable-loading", true);
-        //console.log("Saved: ", this.task);
-        const updatedTask = {
-          firebaseId: this.currentTaskItem.firebaseId,
-          id: this.currentTaskItem.id,
-          newTitle: this.currentTaskItemTitle,
-          newSubTitle: this.currentTaskItemSubTitle,
-        };
-        await this.$store.dispatch("updateTodoDescription", updatedTask);
-        this.$emit("edited-task");
-      } catch (er) {
-        this.$emit("update-fail");
-      }finally{
-        this.$emit("close-menu");
+      if(!this.currentTaskItemTitle || !this.currentTaskItemSubTitle){
+        this.isError = true;
+        let errorMessage = "Please enter values in all the fields."
+        this.errorText = errorMessage;
+      }else{
+        this.isError = false;
+        try {
+          this.editDialog = false;
+          this.$emit("enable-loading", true);
+          //console.log("Saved: ", this.task);
+          const updatedTask = {
+            firebaseId: this.currentTaskItem.firebaseId,
+            id: this.currentTaskItem.id,
+            newTitle: this.currentTaskItemTitle,
+            newSubTitle: this.currentTaskItemSubTitle,
+          };
+          await this.$store.dispatch("updateTodoDescription", updatedTask);
+          this.$emit("edited-task");
+        } catch (er) {
+          this.$emit("update-fail");
+        }finally{
+          this.$emit("close-menu");
+        }
       }
     },
   },
 };
 </script>
+<style scoped>
+.errorTextStyle{
+  color: red;
+}
+</style>
