@@ -176,4 +176,9 @@ export default {
 .errorTextStyle{
   color: red;
 }
+@media only screen and (max-width: 480px){
+  .container{
+    max-width: 400px ;
+  }
+}
 </style>

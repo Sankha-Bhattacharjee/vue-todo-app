@@ -65,9 +65,10 @@ export default {
       this.filterTodos(newVal);
     },
   },
-  created() {
-    this.updatedTaskList = this.tasks;
-  },
+  // created() {
+  //   console.log(this.updatedTaskList, this.tasks)
+  //   this.updatedTaskList = this.tasks;
+  // },
   computed: {
     taskList() {
       return this.$store.getters.getTaskList;
@@ -102,10 +103,19 @@ export default {
       const dueDateMessage = "Due date has been updated";
       this.showAlertMessageDialog(dueDateMessage);
     },
-    async deleteTask(id) {
-      this.isLoading = false;
-      const deleteMessage = "The item has been deleted.";
-      this.showAlertMessageDialog(deleteMessage);
+    async deleteTask(payload) {
+      this.isLoading = true;
+      try{
+        await this.$store.dispatch("deleteCurrentTask", payload);
+        const deleteMessage = "The item has been deleted.";
+        this.showAlertMessageDialog(deleteMessage);
+      }catch{
+        this.isLoading = false;
+        this.showFailUpdateMessage(1);
+      }finally{
+        this.isLoading = false;
+      } 
+      
     },
     showAlertForAddingTask(msg) {
       this.showAlertMessageDialog(msg);

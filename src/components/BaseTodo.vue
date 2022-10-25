@@ -15,8 +15,7 @@
         <v-list-item-subtitle>
           {{ taskItem.subTitle }}
           <v-row
-            justify="end"
-            class="mr-10 pb-5 font-weight-light text-body-2"
+            class="mr-10 pb-5 font-weight-light text-body-2 task-item-style"
             v-if="isDueDateSet"
           >
             <v-icon small>mdi-calendar</v-icon> Due Date:
@@ -76,17 +75,11 @@ export default {
       this.$emit("loading-spinner", false);
     },
     async deleteTaskItem(id) {
-      this.$emit("loading-spinner", true);
-      try {
-        await this.$store.dispatch("deleteCurrentTask", {
+      const actionPayload = {
         id: id,
         firebaseId: this.taskItem.firebaseId,
-      });
-      this.$emit("delete-taskitem", id);
-      } catch (err) {
-        this.$emit("fail-update",1);
       }
-      
+      this.$emit("delete-taskitem",actionPayload);
     },
     updateCurrentTask(updatedTask) {
       this.$emit("update-task-item");
@@ -107,3 +100,20 @@ export default {
   },
 };
 </script>
+<style scoped>
+.task-item-style{
+  justify-content: flex-end !important;
+}
+@media only screen and (max-width: 480px) {
+  .task-item-style{
+  justify-content: flex-start !important;
+  margin: 0;
+}
+.v-list-item__title{
+  line-height: 1.5;
+}
+.text-body-2{
+  line-height: 2rem;
+}
+}
+</style>
