@@ -4,7 +4,7 @@
       <template v-slot:prepend>
         <v-list-item two-line>
           <v-list-item-avatar>
-            <img src="" />
+            <img src="./assets/neutral_profile.jpg" />
           </v-list-item-avatar>
 
           <v-list-item-content>

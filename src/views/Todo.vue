@@ -7,6 +7,7 @@
         max-height="350"
         max-width="350"
         src="../assets/background.jpg"
+        loading="lazy"
       ></v-img>
       <v-card-title class="middleImageText title"
         ><router-link to="/auth" class="mr-1">LogIn</router-link> /
@@ -61,7 +62,6 @@ export default {
   },
   watch: {
     searchTodo(newVal, oldVal) {
-      //console.log("new ",newVal,"old", oldVal);
       this.filterTodos(newVal);
     },
   },
@@ -80,7 +80,6 @@ export default {
   methods: {
     toggleLoaderSpinner(val){
       this.isLoading = val;
-      //console.log("loading method", this.isLoading)
     },
     async filterTodos(val) {
       this.isLoading = true;
