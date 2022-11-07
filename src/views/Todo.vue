@@ -10,9 +10,9 @@
         loading="lazy"
       ></v-img>
       <v-card-title class="middleImageText title"
-        ><router-link to="/auth" class="mr-1">LogIn</router-link> /
-        <router-link to="/auth" class="mr-1 ml-1">SignUp</router-link>to add new
-        items</v-card-title
+        ><router-link to="/auth" class="mr-1 mobview">LogIn</router-link> /
+        <router-link to="/auth" class="mr-1 ml-1">SignUp</router-link>
+        to add new items</v-card-title
       >
     </v-card>
     <div v-else>
@@ -153,5 +153,13 @@ export default {
 }
 .middleImageText {
   color: #1976d2 !important;
+}
+@media only screen and (max-width: 480px){
+  .middleImageText{
+    margin-left: 40px;
+  }
+ .mobview{
+   margin-left: 8px;
+ }
 }
 </style>

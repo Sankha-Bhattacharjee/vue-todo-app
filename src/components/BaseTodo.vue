@@ -115,5 +115,8 @@ export default {
 .text-body-2{
   line-height: 2rem;
 }
+.v-application .mr-10{
+  margin-right: 0 !important;
+}
 }
 </style>

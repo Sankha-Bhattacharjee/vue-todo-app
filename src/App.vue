@@ -36,7 +36,7 @@
         </v-list-item>
       </v-list>
       <template v-slot:append>
-        <div class="pa-2" v-if="$store.getters.getIsAuthenticated">
+        <div class="pa-2 mb-2" v-if="$store.getters.getIsAuthenticated">
           <v-btn block class="primary" @click="logout">
             Logout
           </v-btn>
@@ -143,5 +143,10 @@ export default {
   text-decoration: none;
   color: rgba(0, 0, 0, 0.6);
   cursor: text;
+}
+@media only screen and (max-width: 480px){
+.v-application .pa-2{
+  margin-bottom: 25px;
+}
 }
 </style>
