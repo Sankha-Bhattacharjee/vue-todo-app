@@ -12,6 +12,9 @@
         <v-list-item-title @click="toggleDialog">{{ option.title }}</v-list-item-title>
       </v-list-item> -->
       <v-list-item>
+        <view-todo @close-menu="closeMenu" :currentTaskItem="currentTask"/>
+      </v-list-item>
+      <v-list-item>
         <edit-todo
           @edited-task="editTask"
           @close-menu="closeMenu"
@@ -38,6 +41,7 @@
 import EditTodo from "./EditTodo.vue";
 import DeleteTodo from "./DeleteTodo.vue";
 import DueDate from "./DueDate.vue";
+import ViewTodo from "./ViewTodo.vue";
 export default {
   emit: ["update-task", "delete-current-task","update-date","show-loading-spinner","fail-update"],
   props: ["currentTask"],
@@ -45,6 +49,7 @@ export default {
     EditTodo,
     DeleteTodo,
     DueDate,
+    ViewTodo
   },
   data() {
     return {

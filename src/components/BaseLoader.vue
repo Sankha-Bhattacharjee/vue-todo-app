@@ -26,8 +26,8 @@
 }
 @media only screen and (max-width: 480px){
   .v-progress-circular {
-  left: 35%;
-  top: 30%;
+  left: 30%;
+  top: 20%;
 }
 }
 </style>
