@@ -12,11 +12,43 @@ export default {
         const filteredTaskList = [];
         for (let t in responseData) {
             if (responseData[t].title.toLowerCase().includes(payload) || responseData[t].subTitle.toLowerCase().includes(payload)) {
-                filteredTaskList.push(responseData[t]);
+                filteredTaskList.push({...responseData[t], firebaseId: t});
             }
         }
         context.commit("setTaskList", filteredTaskList);
     },
+    async filterByTaskList(context, payload) {
+        const userId = context.getters.getUserId;
+        const response = await fetch(`https://todo-app-a4835-default-rtdb.firebaseio.com/users/${userId}/todos.json`);
+
+        const responseData = await response.json();
+        if (!response.ok) {
+            const error = new Error("Failed to fetch todos list!")
+            throw error;
+        }
+
+        const filteredTaskList = [];
+        if(payload === "Completed"){
+            for (let t in responseData) {
+                if (responseData[t].done) {
+                    filteredTaskList.push({...responseData[t], firebaseId: t});
+                }
+            }
+        }else if(payload === 'Pending'){
+            for (let t in responseData) {
+                if (!responseData[t].done) {
+                    filteredTaskList.push({...responseData[t], firebaseId: t});
+                }
+            }
+        }else if(payload === 'All'){
+            for (let t in responseData) {
+                filteredTaskList.push({...responseData[t], firebaseId: t});
+            }
+        }
+        //console.log(filteredTaskList);
+        context.commit("setTaskList", filteredTaskList);
+    },
+    
     async addNewTaskToTaskList(context, payload) {
         const userId = context.getters.getUserId;
         const response = await fetch(`https://todo-app-a4835-default-rtdb.firebaseio.com/users/${userId}/todos.json`, {
