@@ -17,7 +17,8 @@
     </v-card>
     <div v-else>
       <div>
-        <add-todo @show-alert="showAlertForAddingTask" @toggle-loader="toggleLoaderSpinner"/>
+          <add-todo @show-alert="showAlertForAddingTask" @toggle-loader="toggleLoaderSpinner"/>
+          <filter-todo id="todo-filter" />
         <v-list flat three-line>
           <div v-for="task in taskList" :key="task.id">
             <base-todo
@@ -46,28 +47,37 @@
 import AddTodo from "../components/AddTodo.vue";
 import AlertDialog from "../components/AlertDialog.vue";
 import BaseTodo from "../components/BaseTodo.vue";
+import FilterTodo from "../components/FilterTodo.vue"
 export default {
   props: ["searchTodo"],
   components: {
     AddTodo,
     AlertDialog,
     BaseTodo,
+    FilterTodo
   },
   data() {
     return {
       alertMessage: "",
       showAlertMessage: false,
-      isLoading: false
+      isLoading: false      
     };
   },
   watch: {
     searchTodo(newVal, oldVal) {
       this.filterTodos(newVal);
     },
+    filterBy(val){
+        if(!val){
+          val = "All";
+        }
+        //console.log(val);
+      this.filterByTodos(val);
+    }
   },
   // created() {
-  //   console.log(this.updatedTaskList, this.tasks)
-  //   this.updatedTaskList = this.tasks;
+  //   // console.log(this.updatedTaskList, this.tasks)
+  //   // this.updatedTaskList = this.tasks
   // },
   computed: {
     taskList() {
@@ -75,6 +85,9 @@ export default {
     },
     isUserLoggedIn() {
       return this.$store.getters.getIsAuthenticated;
+    },
+    filterBy(){
+      return this.$route.query.filterBy;
     },
   },
   methods: {
@@ -86,6 +99,16 @@ export default {
       try {
         const searchedKey = val.toLowerCase();
         await this.$store.dispatch("filterTaskList", searchedKey);
+      } catch (err) {
+        this.showAlertMessageDialog(err.message);
+      }
+      
+      this.isLoading = false;
+    },
+    async filterByTodos(val){
+      this.isLoading = true;
+      try {
+        await this.$store.dispatch("filterByTaskList", val);
       } catch (err) {
         this.showAlertMessageDialog(err.message);
       }
@@ -153,6 +176,9 @@ export default {
 }
 .middleImageText {
   color: #1976d2 !important;
+}
+#todo-filter{
+    margin-top: -58px;
 }
 @media only screen and (max-width: 480px){
   .middleImageText{
