@@ -71,7 +71,7 @@ export default {
         if(!val){
           val = "All";
         }
-        console.log(val);
+        //console.log(val);
       this.filterByTodos(val);
     }
   },
@@ -177,6 +177,9 @@ export default {
 .middleImageText {
   color: #1976d2 !important;
 }
+#todo-filter{
+    margin-top: -58px;
+}
 @media only screen and (max-width: 480px){
   .middleImageText{
     margin-left: 40px;
@@ -184,8 +187,5 @@ export default {
  .mobview{
    margin-left: 8px;
  }
-}
-#todo-filter{
-    margin-top: -58px;
 }
 </style>
